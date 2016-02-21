@@ -17,7 +17,7 @@ namespace Routemeister.UnitTests
         [Test]
         public void Should_create_two_routes_with_two_actions_each_When_two_concrete_message_handlers_in_two_classes_exists()
         {
-            var routes = UnitUnderTest.Create(new[] { GetType().Assembly }, typeof(IHandleForCaseA<>));
+            var routes = UnitUnderTest.Create(GetType().Assembly, typeof(IHandleForCaseA<>));
 
             routes.Should().HaveCount(2);
             routes.Single(r => r.MessageType == typeof(ConcreteMessageA)).Actions.Should().HaveCount(2);
@@ -27,7 +27,7 @@ namespace Routemeister.UnitTests
         [Test]
         public void Should_create_two_routes_with_two_actions_each_When_two_interface_message_handlers_in_two_classes_exists()
         {
-            var routes = UnitUnderTest.Create(new[] { GetType().Assembly }, typeof(IHandleForCaseB<>));
+            var routes = UnitUnderTest.Create(GetType().Assembly, typeof(IHandleForCaseB<>));
 
             routes.Should().HaveCount(2);
             routes.Single(r => r.MessageType == typeof(INonConcreteMessageA)).Actions.Should().HaveCount(2);

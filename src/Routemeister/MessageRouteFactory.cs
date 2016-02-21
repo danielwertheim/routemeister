@@ -26,13 +26,27 @@ namespace Routemeister
         /// <summary>
         /// Creates message routes.
         /// </summary>
-        /// <param name="assemblies">At least one is required. Scanned for message handlers.</param>
+        /// <param name="assembly">Assembly to be scanned for message handlers</param>
         /// <param name="messageHandlerMarker">
         /// Ensure it is an generic interface containing one member only,
         /// which is a method accepting one argument.
         /// </param>
         /// <returns>Message routes</returns>
-        public MessageRoute[] Create(Assembly[] assemblies, Type messageHandlerMarker)
+        public MessageRoutes Create(Assembly assembly, Type messageHandlerMarker)
+        {
+            return Create(new[] { assembly }, messageHandlerMarker);
+        }
+
+        /// <summary>
+        /// Creates message routes.
+        /// </summary>
+        /// <param name="assemblies">Assemblies to be scanned for message handlers.</param>
+        /// <param name="messageHandlerMarker">
+        /// Ensure it is an generic interface containing one member only,
+        /// which is a method accepting one argument.
+        /// </param>
+        /// <returns>Message routes</returns>
+        public MessageRoutes Create(Assembly[] assemblies, Type messageHandlerMarker)
         {
             EnsureValidAssemblies(assemblies);
             EnsureValidMessageHandlerMarker(messageHandlerMarker);
@@ -59,7 +73,10 @@ namespace Routemeister
                 }
             }
 
-            return messageRoutes.Select(mr => new MessageRoute(mr.Key, mr.Value.ToArray())).ToArray();
+            return new MessageRoutes
+            {
+                messageRoutes.Select(mr => new MessageRoute(mr.Key, mr.Value.ToArray()))
+            };
         }
 
         private static void EnsureValidAssemblies(Assembly[] assemblies)
