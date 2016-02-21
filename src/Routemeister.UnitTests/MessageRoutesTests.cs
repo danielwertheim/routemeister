@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -149,7 +150,7 @@ namespace Routemeister.UnitTests
 
         private static MessageRoute CreateMessageRoute<T>()
         {
-            Action<object> fakeAction = message => { };
+            Func<object, Task> fakeAction = message => Task.FromResult(0);
 
             return new MessageRoute(typeof(T), new[] { fakeAction });
         }

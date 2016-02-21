@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Routemeister
 {
     public class MessageRoute : IEquatable<MessageRoute>
     {
         public Type MessageType { get; }
-        public Action<object>[] Actions { get; }
+        public Func<object, Task>[] Actions { get; }
 
-        public MessageRoute(Type messageType, Action<object>[] actions)
+        public MessageRoute(Type messageType, Func<object, Task>[] actions)
         {
             if (messageType == null)
                 throw new ArgumentNullException(nameof(messageType));

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Routemeister
 {
@@ -20,7 +21,7 @@ namespace Routemeister
         }
 
         // ReSharper disable once UnusedMember.Local
-        private static Action<object> Convert<T>(Action<T> action)
+        private static Func<object, Task> Convert<T>(Func<T, Task> action)
         {
             if (action == null) return null;
 

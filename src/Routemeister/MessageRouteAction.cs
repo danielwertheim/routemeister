@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Routemeister
 {
@@ -18,7 +19,7 @@ namespace Routemeister
 
             MessageHandlerType = messageHandlerType;
             MessageType = messageType;
-            ActionType = typeof(Action<>).MakeGenericType(messageType);
+            ActionType = typeof(Func<,>).MakeGenericType(messageType, typeof(Task));
         }
     }
 }

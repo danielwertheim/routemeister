@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Routemeister
 {
@@ -37,7 +38,7 @@ namespace Routemeister
             EnsureValidMessageHandlerMarker(messageHandlerMarker);
 
             var messageHandlerMethodName = ExtractMessageHandlerMethodName(messageHandlerMarker);
-            var messageRoutes = new Dictionary<Type, List<Action<object>>>();
+            var messageRoutes = new Dictionary<Type, List<Func<object, Task>>>();
             var messageRouteActions = GetMessageRouteActions(assemblies, messageHandlerMarker);
 
             foreach (var messageHandlerActions in messageRouteActions.GroupBy(i => i.Key))
@@ -49,10 +50,10 @@ namespace Routemeister
                     var actionDelegate = Delegate.CreateDelegate(messageRouteAction.ActionType, messageHandler, actionMethod);
 
                     var cfn = ActionConverter.MakeGenericMethodFor(messageRouteAction.MessageType);
-                    var action = (Action<object>)cfn.Invoke(this, new object[] { actionDelegate });
+                    var action = (Func<object, Task>)cfn.Invoke(this, new object[] { actionDelegate });
 
                     if (!messageRoutes.ContainsKey(messageRouteAction.MessageType))
-                        messageRoutes[messageRouteAction.MessageType] = new List<Action<object>>();
+                        messageRoutes[messageRouteAction.MessageType] = new List<Func<object, Task>>();
 
                     messageRoutes[messageRouteAction.MessageType].Add(action);
                 }

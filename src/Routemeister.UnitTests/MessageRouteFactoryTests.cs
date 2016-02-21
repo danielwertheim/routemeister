@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -35,12 +36,12 @@ namespace Routemeister.UnitTests
 
         public interface IHandleForCaseA<in T>
         {
-            void Handle(T message);
+            Task HandleAsync(T message);
         }
 
         public interface IHandleForCaseB<in T>
         {
-            void Handle(T message);
+            Task HandleAsync(T message);
         }
 
         public class ConcreteMessageA { }
@@ -56,20 +57,24 @@ namespace Routemeister.UnitTests
             IHandleForCaseB<INonConcreteMessageA>,
             IHandleForCaseB<INonConcreteMessageB>
         {
-            public void Handle(ConcreteMessageA message)
+            public Task HandleAsync(ConcreteMessageA message)
             {
+                return Task.FromResult(0);
             }
 
-            public void Handle(ConcreteMessageB message)
+            public Task HandleAsync(ConcreteMessageB message)
             {
+                return Task.FromResult(0);
             }
 
-            public void Handle(INonConcreteMessageA message)
+            public Task HandleAsync(INonConcreteMessageA message)
             {
+                return Task.FromResult(0);
             }
 
-            public void Handle(INonConcreteMessageB message)
+            public Task HandleAsync(INonConcreteMessageB message)
             {
+                return Task.FromResult(0);
             }
         }
 
@@ -79,20 +84,24 @@ namespace Routemeister.UnitTests
             IHandleForCaseB<INonConcreteMessageA>,
             IHandleForCaseB<INonConcreteMessageB>
         {
-            public void Handle(ConcreteMessageA message)
+            public Task HandleAsync(ConcreteMessageA message)
             {
+                return Task.FromResult(0);
             }
 
-            public void Handle(ConcreteMessageB message)
+            public Task HandleAsync(ConcreteMessageB message)
             {
+                return Task.FromResult(0);
             }
 
-            public void Handle(INonConcreteMessageA message)
+            public Task HandleAsync(INonConcreteMessageA message)
             {
+                return Task.FromResult(0);
             }
 
-            public void Handle(INonConcreteMessageB message)
+            public Task HandleAsync(INonConcreteMessageB message)
             {
+                return Task.FromResult(0);
             }
         }
     }
