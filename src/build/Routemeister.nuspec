@@ -15,5 +15,6 @@
     </metadata>
     <files>
         <file src="Routemeister\Routemeister.dll" target="lib\net45" />
+        <file src="Routemeister\Routemeister.XML" target="lib\net45" />
     </files>
 </package>

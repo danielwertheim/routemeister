@@ -70,7 +70,7 @@ gulp.task('build', function() {
 
 gulp.task('copy', function() {
     var tasks = config.projects.map(function (name) {
-        return gulp.src(config.srcdir + 'projects/' + name + '/bin/' + config.build.profile + '/*.{dll,XML}')
+        return gulp.src(config.srcdir + name + '/bin/' + config.build.profile + '/*.{dll,XML}')
             .pipe(flatten())
             .pipe(gulp.dest(config.build.outdir + '/' + name));
     });
@@ -79,7 +79,7 @@ gulp.task('copy', function() {
 });
 
 gulp.task('unit-tests', function () {
-    return gulp.src(config.srcdir + 'tests/**/bin/' + config.build.profile + '/*.UnitTests.dll')
+    return gulp.src(config.srcdir + '*.UnitTests/**/bin/' + config.build.profile + '/*.UnitTests.dll')
         .pipe(shell(config.tools.nunit + ' <%= file.path %> --noresult'));
 });
 
