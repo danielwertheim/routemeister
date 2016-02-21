@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="MessageRouteFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTestsOf.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
