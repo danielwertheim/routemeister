@@ -1,5 +1,5 @@
 # Routemeister
-Routemeister is build for assisting with in-process async message routing.
+Routemeister is a small NuGet built with one single purpose. Assisting with in-process async message routing. It can be used if you e.g. are dispatching messages cross process using RabbitMQ or ActiveMQ and then want to dispatch the message to typed handlers within the consuming process.
 
 ## Usage
 First, install it. It's distributed via NuGet.
@@ -10,7 +10,7 @@ install-package routemeister
 
 Now, you need to define a message handler marker interface. The requirements are:
 
-- Generic interface (name it what ever you want) with one generic argument
+- Generic interface, with one generic argument (name it what ever you want)
 - Should contain a single method (name it what ever you want)
 - The method should accept one argument only (the message)
 - The method should return `Task`.
