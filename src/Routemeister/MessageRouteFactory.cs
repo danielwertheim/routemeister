@@ -37,13 +37,13 @@ namespace Routemeister
             EnsureValidMessageHandlerMarker(messageHandlerMarker);
 
             var messageHandlerMethodName = ExtractMessageHandlerMethodName(messageHandlerMarker);
-            var messageRoutes = new Dictionary<Type, MessageRoute>();
+            var messageRoutes = new Dictionary<Type, List<Action<object>>>();
             var messageRouteActions = GetMessageRouteActions(assemblies, messageHandlerMarker);
 
-            foreach (var kv in messageRouteActions)
+            foreach (var messageHandlerActions in messageRouteActions.GroupBy(i => i.Key))
             {
-                var messageHandler = MessageHandlerCreator(kv.Key);
-                foreach (var messageRouteAction in kv.Value)
+                var messageHandler = MessageHandlerCreator(messageHandlerActions.Key);
+                foreach (var messageRouteAction in messageHandlerActions.SelectMany(i => i.Value))
                 {
                     var actionMethod = GetMessageHandlerMethod(messageHandlerMethodName, messageRouteAction);
                     var actionDelegate = Delegate.CreateDelegate(messageRouteAction.ActionType, messageHandler, actionMethod);
@@ -52,13 +52,13 @@ namespace Routemeister
                     var action = (Action<object>)cfn.Invoke(this, new object[] { actionDelegate });
 
                     if (!messageRoutes.ContainsKey(messageRouteAction.MessageType))
-                        messageRoutes[messageRouteAction.MessageType] = new MessageRoute(messageRouteAction.MessageType);
+                        messageRoutes[messageRouteAction.MessageType] = new List<Action<object>>();
 
-                    messageRoutes[messageRouteAction.MessageType].Actions.Add(action);
+                    messageRoutes[messageRouteAction.MessageType].Add(action);
                 }
             }
 
-            return messageRoutes.Values.ToArray();
+            return messageRoutes.Select(mr => new MessageRoute(mr.Key, mr.Value.ToArray())).ToArray();
         }
 
         private static void EnsureValidAssemblies(Assembly[] assemblies)

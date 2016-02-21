@@ -1,20 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Routemeister
 {
     public class MessageRoute : IEquatable<MessageRoute>
     {
         public Type MessageType { get; }
-        public IList<Action<object>> Actions { get; private set; }
+        public Action<object>[] Actions { get; }
 
-        public MessageRoute(Type messageType)
+        public MessageRoute(Type messageType, Action<object>[] actions)
         {
             if (messageType == null)
                 throw new ArgumentNullException(nameof(messageType));
+            if (actions == null)
+                throw new ArgumentNullException(nameof(actions));
+            if(!actions.Any())
+                throw new ArgumentException("A message route must have actions. No actions were passed.");
 
             MessageType = messageType;
-            Actions = new List<Action<object>>();
+            Actions = actions;
         }
 
         public override bool Equals(object obj)

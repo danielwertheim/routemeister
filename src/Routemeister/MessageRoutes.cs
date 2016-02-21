@@ -8,22 +8,20 @@ namespace Routemeister
 {
     public class MessageRoutes : IEnumerable<MessageRoute>
     {
-        protected ConcurrentDictionary<Type, MessageRoute> Items { get; }
+        private readonly ConcurrentDictionary<Type, MessageRoute> _state = new ConcurrentDictionary<Type, MessageRoute>();
 
-        public bool IsEmpty => Items.Any() == false;
+        public bool IsEmpty => _state.Any() == false;
 
-        public IEnumerable<Type> KnownMessageTypes => Items.Keys;
+        public IEnumerable<Type> KnownMessageTypes => _state.Keys;
 
-        public MessageRoute this[Type messageType] => Items[messageType];
+        public MessageRoute this[Type messageType] => _state[messageType];
 
-        public MessageRoutes()
+        public bool HasRoute(Type messageType)
         {
-            Items = new ConcurrentDictionary<Type, MessageRoute>();
-        }
+            if (messageType == null)
+                throw new ArgumentNullException(nameof(messageType));
 
-        public bool Contains(MessageRoute route)
-        {
-            return Items.ContainsKey(route.MessageType);
+            return _state.ContainsKey(messageType);
         }
 
         public MessageRoutes Add(IEnumerable<MessageRoute> routes)
@@ -37,30 +35,29 @@ namespace Routemeister
             return this;
         }
 
-        public MessageRoutes Add(MessageRoute route)
+        public MessageRoutes Add(MessageRoute newRoute)
         {
-            if (route == null)
-                throw new ArgumentNullException(nameof(route));
+            if (newRoute == null)
+                throw new ArgumentNullException(nameof(newRoute));
 
-            if (!Contains(route))
+            MessageRoute existingRoute;
+            if (_state.TryGetValue(newRoute.MessageType, out existingRoute))
             {
-                Items.TryAdd(route.MessageType, route);
-                return this;
+                if (ReferenceEquals(existingRoute, newRoute))
+                    return this;
+
+                throw new InvalidOperationException($"Route for message type '{newRoute.MessageType.Name}' already exists.");
             }
 
-            var existingRoute = Items[route.MessageType];
-            if(ReferenceEquals(existingRoute, route))
+            if (_state.TryAdd(newRoute.MessageType, newRoute))
                 return this;
 
-            foreach (var action in route.Actions)
-                existingRoute.Actions.Add(action);
-
-            return this;
+            throw new Exception($"Could not add new route for message type '{newRoute.MessageType.Name}'. Do not know why.");
         }
 
         public MessageRoute GetRoute(Type messageType)
         {
-            return Items.ContainsKey(messageType) ? Items[messageType] : null;
+            return _state.ContainsKey(messageType) ? _state[messageType] : null;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -70,7 +67,7 @@ namespace Routemeister
 
         public IEnumerator<MessageRoute> GetEnumerator()
         {
-            return Items.Values.GetEnumerator();
+            return _state.Values.GetEnumerator();
         }
     }
 }
