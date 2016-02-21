@@ -36,11 +36,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionConverter.cs" />
+    <Compile Include="IAsyncMessageRouter.cs" />
     <Compile Include="MessageRoute.cs" />
     <Compile Include="MessageRouteAction.cs" />
     <Compile Include="MessageRouteFactory.cs" />
     <Compile Include="MessageRoutes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routers\SimpleAsyncMessageRouter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

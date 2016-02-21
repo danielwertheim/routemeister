@@ -9,7 +9,6 @@ namespace Routemeister.UnitTests
     {
         protected T UnitUnderTest { get; set; }
 
-        [DebuggerStepThrough]
         public void Dispose()
         {
             var asDisposable = UnitUnderTest as IDisposable;
@@ -21,19 +20,15 @@ namespace Routemeister.UnitTests
     public abstract class UnitTests
     {
         [SetUp]
-        [DebuggerStepThrough]
         protected virtual void OnBeforeEachTest() { }
 
         [TearDown]
-        [DebuggerStepThrough]
         protected virtual void OnAfterEachTest() { }
 
         [OneTimeSetUp]
-        [DebuggerStepThrough]
         protected virtual void OnBeforeAllTests() { }
 
         [OneTimeTearDown]
-        [DebuggerStepThrough]
         protected virtual void OnAfterAllTests() { }
     }
 }
