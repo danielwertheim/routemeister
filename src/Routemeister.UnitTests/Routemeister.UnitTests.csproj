@@ -52,7 +52,7 @@
     <Compile Include="MessageRouteFactoryTests.cs" />
     <Compile Include="MessageRoutesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleAsyncMessageRouterTests.cs" />
+    <Compile Include="SequentialAsyncMessageRouterTests.cs" />
     <Compile Include="UnitTestsOf.cs" />
   </ItemGroup>
   <ItemGroup>

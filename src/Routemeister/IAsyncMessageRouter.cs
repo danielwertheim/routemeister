@@ -4,6 +4,6 @@ namespace Routemeister
 {
     public interface IAsyncMessageRouter
     {
-        Task RouteAsync<T>(T msg);
+        Task RouteAsync<T>(T message);
     }
 }

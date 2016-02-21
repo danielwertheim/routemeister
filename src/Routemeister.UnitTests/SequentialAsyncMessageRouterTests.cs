@@ -8,7 +8,7 @@ using Routemeister.Routers;
 namespace Routemeister.UnitTests
 {
     [TestFixture]
-    public class SimpleAsyncMessageRouterTests : UnitTestsOf<SimpleAsyncMessageRouter>
+    public class SequentialAsyncMessageRouterTests : UnitTestsOf<SequentialAsyncMessageRouter>
     {
         protected override void OnBeforeEachTest()
         {
@@ -18,7 +18,7 @@ namespace Routemeister.UnitTests
                 factory.Create(new[] {GetType().Assembly}, typeof (IHandle<>))
             };
 
-            UnitUnderTest = new SimpleAsyncMessageRouter(routes);
+            UnitUnderTest = new SequentialAsyncMessageRouter(routes);
         }
 
         [Test]
