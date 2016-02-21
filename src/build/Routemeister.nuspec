@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <metadata>
+        <id>Routemeister</id>
+        <title>Routemeister - for in-process async message routing</title>
+        <version>$version$</version>
+        <authors>danielwertheim</authors>
+        <copyright>©Daniel Wertheim</copyright>
+        <summary>Used for in-process async message routing</summary>
+        <description>Provides construct for scanning assemblies finding types implementing a message handler marker interface of choice and builds routes from them that later can be used with custom or shipped in-process routers.</description>
+        <projectUrl>https://github.com/danielwertheim/routemeister</projectUrl>
+        <licenseUrl>https://raw.githubusercontent.com/danielwertheim/routemeister/master/LICENSE.txt</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <tags>route routes messaging in-process</tags>
+    </metadata>
+    <files>
+        <file src="Routemeister\Routemeister.dll" target="lib\net45" />
+    </files>
+</package>
