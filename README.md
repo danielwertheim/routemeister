@@ -74,7 +74,7 @@ The factory needs to know in what assemblies to look for message handlers. It al
 MessageRoutes routes = factory.Create(typeof(SomeType).Assembly, typeof(IHandle<>));
 ```
 
-Know, the `routes` can be used as you want to route messages manually or using e.g. `SequentialAsyncMessageRouter`.
+The `routes` can now be used as you want to route messages manually, or you can start using an existing router, e.g. the `SequentialAsyncMessageRouter`.
 
 ```csharp
 var router = new SequentialAsyncMessageRouter(routes);
