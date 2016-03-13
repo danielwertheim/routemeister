@@ -20,7 +20,7 @@ var ver = '0.1.0',
         },
         tools: {
             msbuild: '"C:/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe"',
-            nunit: '"./tools/NUnit.Console.3.0.1/tools/nunit3-console.exe"'
+            nunit: '"./tools/NUnit.ConsoleRunner.3.2.0/tools/nunit3-console.exe"'
         }
     };
 
