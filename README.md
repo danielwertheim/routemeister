@@ -1,14 +1,45 @@
 # Routemeister
-Routemeister is a small NuGet built with one single purpose. Assisting with in-process async message routing. It can be used if you e.g. are dispatching messages cross process using RabbitMQ or ActiveMQ and then want to dispatch the message to typed handlers within the consuming process.
+Routemeister is a small NuGet built with one single purpose. **Effectively performing in-process async message routing.** It can be used if you e.g. are dispatching messages cross process using RabbitMQ or ActiveMQ and then want to dispatch the message to typed handlers within the consuming process.
+
+## Numbers
+Below are some numbers comparing against pure C# method calls.
+
+It's not really a fair comparision. Since the C# variant will not really route a message. It knows where to call each time. That's why I included the `Routemeister manual Route` stats.
+
+```
+===== Pure C# - Shared handler =====
+1,25546666666667ms / 100000calls
+1,25546666666667E-05ms / call
+
+===== Pure C# - New handler =====
+1,45813333333333ms / 100000calls
+1,45813333333333E-05ms / call
+
+===== Routemeister - Shared handler =====
+12,1029333333333ms / 100000calls
+0,000121029333333333ms / call
+
+===== Routemeister - New handler =====
+12,1083333333333ms / 100000calls
+0,000121083333333333ms / call
+
+===== Routemeister manual Route - Shared handler =====
+1,73613333333333ms / 100000calls
+1,73613333333333E-05ms / call
+
+===== Routemeister manual Route - New handler =====
+1,67353333333333ms / 100000calls
+1,67353333333333E-05ms / call
+```
 
 ## Usage
-First, install it. It's distributed via NuGet.
+First, install it. It's distributed [via NuGet](https://www.nuget.org/packages/Routemeister).
 
 ```
 install-package routemeister
 ```
 
-Now, you need to define a message handler marker interface. The requirements are:
+Now, you need to **define a custom message handler marker interface**. The requirements are:
 
 - Generic interface, with one generic argument (name it what ever you want)
 - Should contain a single method (name it what ever you want)
