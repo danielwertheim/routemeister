@@ -17,13 +17,8 @@ namespace Routemeister.Routers
 
         public async Task RouteAsync<T>(T message)
         {
-            if (message == null)
-                throw new ArgumentNullException(nameof(message));
-
             var messageType = message.GetType();
             var route = MessageRoutes.GetRoute(messageType);
-            if(route == null)
-                throw new ArgumentException($"Missing route for message type '{messageType.Name}'.", nameof(message));
 
             foreach (var action in route.Actions)
                 await action(message).ConfigureAwait(false);

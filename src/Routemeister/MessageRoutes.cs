@@ -57,7 +57,11 @@ namespace Routemeister
 
         public MessageRoute GetRoute(Type messageType)
         {
-            return _state.ContainsKey(messageType) ? _state[messageType] : null;
+            MessageRoute route;
+
+            return _state.TryGetValue(messageType, out route)
+                ? route
+                : new MessageRoute(messageType);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

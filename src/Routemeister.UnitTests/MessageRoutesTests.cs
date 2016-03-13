@@ -131,12 +131,15 @@ namespace Routemeister.UnitTests
         }
 
         [Test]
-        public void GetRoute_Should_return_null_When_no_route_exist_for_message_type()
+        public void GetRoute_Should_return_empty_route_When_no_route_exist_for_message_type()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
             UnitUnderTest.Add(route);
 
-            UnitUnderTest.GetRoute(typeof(ConcreteMessageB)).Should().BeNull();
+            var retrievedRoute = UnitUnderTest.GetRoute(typeof(ConcreteMessageB));
+
+            retrievedRoute.Should().NotBeNull();
+            retrievedRoute.Actions.Should().BeEmpty();
         }
 
         [Test]
