@@ -9,16 +9,22 @@ namespace Routemeister
         public Type MessageType { get; }
         public Func<object, Task>[] Actions { get; }
 
-        public MessageRoute(Type messageType, Func<object, Task>[] actions)
+        internal MessageRoute(Type messageType)
         {
             if (messageType == null)
                 throw new ArgumentNullException(nameof(messageType));
-            if (actions == null)
-                throw new ArgumentNullException(nameof(actions));
-            if(!actions.Any())
-                throw new ArgumentException("A message route must have actions. No actions were passed.");
 
             MessageType = messageType;
+            Actions = new Func<object, Task>[0];
+        }
+
+        public MessageRoute(Type messageType, Func<object, Task>[] actions) : this(messageType)
+        {
+            if (actions == null)
+                throw new ArgumentNullException(nameof(actions));
+            if (!actions.Any())
+                throw new ArgumentException("A message route must have actions. No actions were passed.");
+
             Actions = actions;
         }
 

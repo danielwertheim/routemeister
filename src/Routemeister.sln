@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routemeister.Timings", "Routemeister.Timings\Routemeister.Timings.csproj", "{88A45DAA-E3D9-41C5-A47D-A3EC08318AC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{95011A31-CD84-450A-A6C1-904AE3DA2790}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95011A31-CD84-450A-A6C1-904AE3DA2790}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95011A31-CD84-450A-A6C1-904AE3DA2790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88A45DAA-E3D9-41C5-A47D-A3EC08318AC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A45DAA-E3D9-41C5-A47D-A3EC08318AC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A45DAA-E3D9-41C5-A47D-A3EC08318AC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A45DAA-E3D9-41C5-A47D-A3EC08318AC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
