@@ -89,26 +89,57 @@ public class SomeOtherHandler :
 
 Now, lets get the routes constructed. A route is represented by `MessageRoute`. Each message route has a `MessageType` and one-to-many `Actions`. Each `Action` represents a message handler.
 
-To get the message routes, you use the `MessageRouteFactory`. To the factory, you pass a `Func<Type, object>` that is responsible for creating an instance of the message handler class. Why? Well, you could pass `Activator.CreateInstance` but you probably want to use your IoC container or something, so that additional dependencies are resolved via the container.
+### Resolve the message handlers
+To get the message routes, you use the `MessageRouteFactory`. To the factory, you pass a `MessageHandlerCreator delegate` which maps to `Func<Type, MessageEnvelope, object>` that is responsible for creating an instance of the message handler class. Why? Well, you could pass `Activator.CreateInstance(type)` but you probably want to use your IoC container or something, so that additional dependencies are resolved via the container.
 
 ```csharp
 //Using Activator
-var factory = new MessageRouteFactory(type => Activator.CreateInstance(type));
+var factory = new MessageRouteFactory((type, envelope) => Activator.CreateInstance(type));
 
-//Using Ninject
-var factory = new MessageRouteFactory(type => kernel.Get(type));
+//Using IoC
+var factory = new MessageRouteFactory((type, envelope) => yourContainer.Resolve(type));
 ```
 
+The `MessageEnvelope` is something you could make use of to carry state using the `MiddlewareEnabledSequentialAsyncMessageRouter`. This lets you register hooks into the message pipeline via `router.Use`. Hence you could use that to e.g. with Autofac.
+
+```csharp
+//Using Autofac
+var factory = new MessageRouteFactory((type, envelope) => envelope.GetScope().Get(type));
+```
+
+In this case `GetScope()` would just be **an extenion method** that accesses `envelope.GetState("scope") as Autofac.ILifetimeScope` that you have assigned in a Routemeister middleware using the `MiddlewareEnabledSequentialAsyncMessageRouter` (or a custom built one). See below for sample.
+
+### Create routes
 The factory needs to know in what assemblies to look for message handlers. It also needs to know which interface is used as the marker interface.
 
 ```csharp
 MessageRoutes routes = factory.Create(typeof(SomeType).Assembly, typeof(IHandle<>));
 ```
 
-The `routes` can now be used as you want to route messages manually, or you can start using an existing router, e.g. the `SequentialAsyncMessageRouter`.
+### Use the routes
+The `routes` can now be used as you want to route messages manually, or you can start using an existing router, e.g. the `SequentialAsyncMessageRouter` or `MiddlewareEnabledSequentialAsyncMessageRouter`.
 
 ```csharp
 var router = new SequentialAsyncMessageRouter(routes);
+await router.RouteAsync(new MyConcreteMessage
+{
+    //Some data
+}).ConfigureAwait(false);
+```
+
+or a sample using [Autofac Lifetime scopes](http://docs.autofac.org/en/latest/lifetime/working-with-scopes.html) to get per request resolving
+
+```csharp
+var router = new MiddlewareEnabledSequentialAsyncMessageRouter(routes);
+router.Use(next => async envelope =>
+{
+    using(var scope = parentscope.BeginLifetimeScope())
+    {
+        envelope.SetState("scope", scope);
+        await next(envelope).ConfigureAwait(false);
+    }
+});
+
 await router.RouteAsync(new MyConcreteMessage
 {
     //Some data

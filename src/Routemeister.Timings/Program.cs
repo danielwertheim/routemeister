@@ -16,12 +16,12 @@ namespace Routemeister.Timings
 
             /***** PURE C# *****/
             var handler = new SampleHandler();
-            Time("Pure C# - Shared handler", numOfCalls, m => handler.HandleAsync(m));
-            Time("Pure C# - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m));
+            Time("Pure C# - Shared handler", numOfCalls, m => handler.HandleAsync(m.Message as Message));
+            Time("Pure C# - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m.Message as Message));
 
             /***** ROUTEMEISTER *****/
-            var sharedHandlerFactory = new MessageRouteFactory(t => handler);
-            var newHandlerFactory = new MessageRouteFactory(t => new SampleHandler());
+            var sharedHandlerFactory = new MessageRouteFactory((t, e) => handler);
+            var newHandlerFactory = new MessageRouteFactory((t, e) => new SampleHandler());
             var sharedHandlerRoutes = sharedHandlerFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyHandlerOf<>));
             var newHandlerRoutes = newHandlerFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyHandlerOf<>));
             var sharedHandlerRouter = new SequentialAsyncMessageRouter(sharedHandlerRoutes);
@@ -30,27 +30,29 @@ namespace Routemeister.Timings
             Time("Routemeister - Shared handler", numOfCalls, sharedHandlerRouter.RouteAsync);
             Time("Routemeister - New handler", numOfCalls, newHandlerRouter.RouteAsync);
 
-            var sharedRoute = sharedHandlerRoutes.GetRoute(typeof(Message));
+            var messageType = typeof(Message);
+            var sharedRoute = sharedHandlerRoutes.GetRoute(messageType);
             var sharedRouteAction = sharedRoute.Actions.Single();
-            Time("Routemeister manual Route - Shared handler", numOfCalls, m => sharedRouteAction(m));
+            Time("Routemeister manual Route - Shared handler", numOfCalls, envelope => sharedRouteAction(envelope));
 
-            var route = sharedHandlerRoutes.GetRoute(typeof(Message));
+            var route = sharedHandlerRoutes.GetRoute(messageType);
             var routeAction = route.Actions.Single();
-            Time("Routemeister manual Route - New handler", numOfCalls, m => routeAction(m));
+            Time("Routemeister manual Route - New handler", numOfCalls, envelope => routeAction(envelope));
         }
 
-        private static async void Time(string testCase, int numOfCalls, Func<Message, Task> dispatch)
+        private static async void Time(string testCase, int numOfCalls, Func<MessageEnvelope, Task> dispatch)
         {
             var stopWatch = new Stopwatch();
             var timings = new List<TimeSpan>();
             var message = new Message();
+            var envelope = new MessageEnvelope(message, message.GetType());
 
             for (var c = 0; c < 5; c++)
             {
                 stopWatch.Start();
                 for (var i = 0; i < numOfCalls; i++)
                 {
-                    await dispatch(message).ConfigureAwait(false);
+                    await dispatch(envelope).ConfigureAwait(false);
                 }
                 stopWatch.Stop();
                 timings.Add(stopWatch.Elapsed);

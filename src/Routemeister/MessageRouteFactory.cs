@@ -8,14 +8,14 @@ namespace Routemeister
 {
     public class MessageRouteFactory
     {
-        protected Func<Type, object> MessageHandlerCreator { get; }
+        protected MessageHandlerCreator MessageHandlerCreator { get; }
 
         /// <summary>
         /// Creates the factory. Use the <paramref name="messageHandlerCreator"/> to hook
         /// in a strategy for how the message handlers instances should be created, e.g. using your IoC.
         /// </summary>
         /// <param name="messageHandlerCreator"></param>
-        public MessageRouteFactory(Func<Type, object> messageHandlerCreator)
+        public MessageRouteFactory(MessageHandlerCreator messageHandlerCreator)
         {
             if (messageHandlerCreator == null)
                 throw new ArgumentNullException(nameof(messageHandlerCreator));
@@ -51,7 +51,7 @@ namespace Routemeister
             EnsureValidAssemblies(assemblies);
             EnsureValidMessageHandlerMarker(messageHandlerMarker);
 
-            var messageRoutes = new Dictionary<Type, List<Func<object, Task>>>();
+            var messageRoutes = new Dictionary<Type, List<Func<MessageEnvelope, Task>>>();
 
             foreach (var groupedMessageHandlerInfos in GetMessageHandlerInfos(assemblies, messageHandlerMarker).GroupBy(i => i.Key))
             {
@@ -59,9 +59,9 @@ namespace Routemeister
                 {
                     var messageHandler = CreateMessageHandler(messageHandlerInfo);
 
-                    List<Func<object, Task>> messageHandlers;
+                    List<Func<MessageEnvelope, Task>> messageHandlers;
                     if (!messageRoutes.TryGetValue(messageHandlerInfo.MessageType, out messageHandlers))
-                        messageRoutes[messageHandlerInfo.MessageType] = new List<Func<object, Task>>();
+                        messageRoutes[messageHandlerInfo.MessageType] = new List<Func<MessageEnvelope, Task>>();
 
                     messageRoutes[messageHandlerInfo.MessageType].Add(messageHandler);
                 }
@@ -73,11 +73,11 @@ namespace Routemeister
             };
         }
 
-        private Func<object, Task> CreateMessageHandler(MessageHandlerInfo messageHandlerInfo)
+        private Func<MessageEnvelope, Task> CreateMessageHandler(MessageHandlerInfo messageHandlerInfo)
         {
-            return message => messageHandlerInfo.MessageHandlerInvoker.Invoke(
-                MessageHandlerCreator(messageHandlerInfo.MessageHandlerContainerType),
-                message);
+            return envelope => messageHandlerInfo.MessageHandlerInvoker.Invoke(
+                MessageHandlerCreator(messageHandlerInfo.MessageHandlerContainerType, envelope),
+                envelope.Message);
         }
 
         private static void EnsureValidAssemblies(Assembly[] assemblies)

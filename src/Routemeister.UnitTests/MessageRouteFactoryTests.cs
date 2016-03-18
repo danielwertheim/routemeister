@@ -11,7 +11,7 @@ namespace Routemeister.UnitTests
     {
         protected override void OnBeforeEachTest()
         {
-            UnitUnderTest = new MessageRouteFactory(Activator.CreateInstance);
+            UnitUnderTest = new MessageRouteFactory((t, e) => Activator.CreateInstance(t));
         }
 
         [Test]

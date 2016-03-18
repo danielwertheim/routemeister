@@ -7,7 +7,7 @@ namespace Routemeister
     public class MessageRoute : IEquatable<MessageRoute>
     {
         public Type MessageType { get; }
-        public Func<object, Task>[] Actions { get; }
+        public Func<MessageEnvelope, Task>[] Actions { get; }
 
         internal MessageRoute(Type messageType)
         {
@@ -15,10 +15,10 @@ namespace Routemeister
                 throw new ArgumentNullException(nameof(messageType));
 
             MessageType = messageType;
-            Actions = new Func<object, Task>[0];
+            Actions = new Func<MessageEnvelope, Task>[0];
         }
 
-        public MessageRoute(Type messageType, Func<object, Task>[] actions) : this(messageType)
+        public MessageRoute(Type messageType, Func<MessageEnvelope, Task>[] actions) : this(messageType)
         {
             if (actions == null)
                 throw new ArgumentNullException(nameof(actions));

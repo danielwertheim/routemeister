@@ -19,9 +19,10 @@ namespace Routemeister.Routers
         {
             var messageType = message.GetType();
             var route = MessageRoutes.GetRoute(messageType);
+            var envelope = new MessageEnvelope(message, messageType);
 
             foreach (var action in route.Actions)
-                await action(message).ConfigureAwait(false);
+                await action(envelope).ConfigureAwait(false);
         }
     }
 }
