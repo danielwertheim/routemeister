@@ -1,6 +1,13 @@
 # Routemeister
 Routemeister is a small NuGet built with one single purpose. **Effectively performing in-process async message routing.** It can be used if you e.g. are dispatching messages cross process using RabbitMQ or ActiveMQ and then want to dispatch the message to typed handlers within the consuming process.
 
+## External writings
+- [Routemeister and middlewares](http://danielwertheim.se/routemeister-and-middlewares/)
+- [Routemeister and Autofac](http://danielwertheim.se/routemeister-and-autofac/)
+- [Reply to please compare Routemesiter with MediatR](http://danielwertheim.se/reply-to-please-compare-routemesiter-with-mediatr/)
+- [Routemeister optimizations](http://danielwertheim.se/routemeister-optimizations/)
+- [Introducing Routemeister](http://danielwertheim.se/introducing-routemeister/)
+
 ## Numbers
 Below are some numbers comparing against pure C# method calls.
 
