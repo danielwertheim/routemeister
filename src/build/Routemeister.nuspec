@@ -10,6 +10,7 @@
         <description>Provides construct for scanning assemblies finding types implementing a message handler marker interface of choice and builds routes from them that later can be used with custom or shipped in-process routers.</description>
         <projectUrl>https://github.com/danielwertheim/routemeister</projectUrl>
         <licenseUrl>https://raw.githubusercontent.com/danielwertheim/routemeister/master/LICENSE.txt</licenseUrl>
+        <releaseNotes>https://github.com/danielwertheim/routemeister/blob/master/ReleaseNotes.md</releaseNotes>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>route routes messaging in-process</tags>
     </metadata>
