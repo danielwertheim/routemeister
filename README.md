@@ -4,6 +4,7 @@ Routemeister is a small NuGet built with one single purpose. **Effectively perfo
 It currently supports `fire-and-forget` routing, so no `request-response` pattern. So you could e.g. use it to represent command-handlers or event-handlers in a CQRS scenario. Where commands are sent to one handler and events are published to many handlers.
 
 ## External writings
+- [Routemeister reaches v1](http://danielwertheim.se/routemeister-reaches-v1/)
 - [Routemeister and middlewares](http://danielwertheim.se/routemeister-and-middlewares/)
 - [Routemeister and Autofac](http://danielwertheim.se/routemeister-and-autofac/)
 - [Reply to please compare Routemesiter with MediatR](http://danielwertheim.se/reply-to-please-compare-routemesiter-with-mediatr/)
