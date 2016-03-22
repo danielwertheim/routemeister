@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>Routemeister</id>
-        <title>Routemeister - for in-process async message routing</title>
+        <title>Routemeister - async message routing</title>
         <version>$version$</version>
         <authors>danielwertheim</authors>
         <copyright>©Daniel Wertheim</copyright>
@@ -12,7 +12,7 @@
         <licenseUrl>https://raw.githubusercontent.com/danielwertheim/routemeister/master/LICENSE.txt</licenseUrl>
         <releaseNotes>https://github.com/danielwertheim/routemeister/blob/master/ReleaseNotes.md</releaseNotes>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <tags>route routes messaging in-process</tags>
+        <tags>route routes messaging commands events in-process</tags>
     </metadata>
     <files>
         <file src="Routemeister\Routemeister.dll" target="lib\net45" />
