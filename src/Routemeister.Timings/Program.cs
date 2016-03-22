@@ -16,8 +16,8 @@ namespace Routemeister.Timings
 
             /***** PURE C# *****/
             var handler = new SampleHandler();
-            Time("Pure C# - Shared handler", numOfCalls, m => handler.HandleAsync(m.Message as Message));
-            Time("Pure C# - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m.Message as Message));
+            Time("Pure C# - Shared handler", numOfCalls, m => handler.HandleAsync(m));
+            Time("Pure C# - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m));
 
             /***** ROUTEMEISTER *****/
             var routeFactory = new MessageRouteFactory();
@@ -31,23 +31,22 @@ namespace Routemeister.Timings
             var messageType = typeof(Message);
             var route = routes.GetRoute(messageType);
             var routeAction = route.Actions.Single();
-            Time("Routemeister manual Route - Shared handler", numOfCalls, envelope => routeAction.Invoke(handler, envelope.Message));
-            Time("Routemeister manual Route - New handler", numOfCalls, envelope => routeAction.Invoke(new SampleHandler(), envelope.Message));
+            Time("Routemeister manual Route - Shared handler", numOfCalls, m => routeAction.Invoke(handler, m));
+            Time("Routemeister manual Route - New handler", numOfCalls, m => routeAction.Invoke(new SampleHandler(), m));
         }
 
-        private static async void Time(string testCase, int numOfCalls, Func<MessageEnvelope, Task> dispatch)
+        private static async void Time(string testCase, int numOfCalls, Func<Message, Task> dispatch)
         {
             var stopWatch = new Stopwatch();
             var timings = new List<TimeSpan>();
             var message = new Message();
-            var envelope = new MessageEnvelope(message, message.GetType());
 
             for (var c = 0; c < 5; c++)
             {
                 stopWatch.Start();
                 for (var i = 0; i < numOfCalls; i++)
                 {
-                    await dispatch(envelope).ConfigureAwait(false);
+                    await dispatch(message).ConfigureAwait(false);
                 }
                 stopWatch.Stop();
                 timings.Add(stopWatch.Elapsed);
