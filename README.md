@@ -10,6 +10,9 @@ It currently supports `fire-and-forget` routing, so no `request-response` patter
 - [Routemeister optimizations](http://danielwertheim.se/routemeister-optimizations/)
 - [Introducing Routemeister](http://danielwertheim.se/introducing-routemeister/)
 
+## Release notes
+Release notes are [kept here](ReleaseNotes.md).
+
 ## Install
 First, install it. It's distributed [via NuGet](https://www.nuget.org/packages/Routemeister).
 
