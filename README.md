@@ -5,6 +5,7 @@ It currently supports `fire-and-forget` routing, so no `request-response` patter
 
 ## External writings
 - [Routemeister reaches v1](http://danielwertheim.se/routemeister-reaches-v1/)
+- [Routemeister how to support request response](http://danielwertheim.se/routemeister-how-to-support-request-response/)
 - [Routemeister and middlewares](http://danielwertheim.se/routemeister-and-middlewares/)
 - [Routemeister and Autofac](http://danielwertheim.se/routemeister-and-autofac/)
 - [Reply to please compare Routemesiter with MediatR](http://danielwertheim.se/reply-to-please-compare-routemesiter-with-mediatr/)
