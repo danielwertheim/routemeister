@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     argv = require('yargs').argv,
     sequence = require('run-sequence');
 
-var ver = '0.3.0',
+var ver = '1.0.0',
     config = {
         srcdir: './../',
         projects: ['Routemeister'],
