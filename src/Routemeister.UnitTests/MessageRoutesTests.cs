@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 
 namespace Routemeister.UnitTests
@@ -153,7 +153,7 @@ namespace Routemeister.UnitTests
 
         private static MessageRoute CreateMessageRoute<T>()
         {
-            Func<object, Task> fakeAction = message => Task.FromResult(0);
+            var fakeAction = Mock.Of<IMessageHandlerAction>();
 
             return new MessageRoute(typeof(T), new[] { fakeAction });
         }

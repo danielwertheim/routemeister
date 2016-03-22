@@ -12,13 +12,13 @@ namespace Routemeister.UnitTests
     {
         protected override void OnBeforeEachTest()
         {
-            var factory = new MessageRouteFactory((t, e) => Activator.CreateInstance(t));
+            var factory = new MessageRouteFactory();
             var routes = new MessageRoutes
             {
                 factory.Create(new[] {GetType().Assembly}, typeof (IHandle<>))
             };
 
-            UnitUnderTest = new SequentialAsyncMessageRouter(routes);
+            UnitUnderTest = new SequentialAsyncMessageRouter((t, e) => Activator.CreateInstance(t), routes);
         }
 
         [Test]

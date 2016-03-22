@@ -20,24 +20,19 @@ namespace Routemeister.Timings
             Time("Pure C# - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m.Message as Message));
 
             /***** ROUTEMEISTER *****/
-            var sharedHandlerFactory = new MessageRouteFactory((t, e) => handler);
-            var newHandlerFactory = new MessageRouteFactory((t, e) => new SampleHandler());
-            var sharedHandlerRoutes = sharedHandlerFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyHandlerOf<>));
-            var newHandlerRoutes = newHandlerFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyHandlerOf<>));
-            var sharedHandlerRouter = new SequentialAsyncMessageRouter(sharedHandlerRoutes);
-            var newHandlerRouter = new SequentialAsyncMessageRouter(newHandlerRoutes);
+            var routeFactory = new MessageRouteFactory();
+            var routes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof (IMyHandlerOf<>));
+            var sharedHandlerRouter = new SequentialAsyncMessageRouter((t, e) => handler, routes);
+            var newHandlerRouter = new SequentialAsyncMessageRouter((t, e) => new SampleHandler(), routes);
 
             Time("Routemeister - Shared handler", numOfCalls, sharedHandlerRouter.RouteAsync);
             Time("Routemeister - New handler", numOfCalls, newHandlerRouter.RouteAsync);
 
             var messageType = typeof(Message);
-            var sharedRoute = sharedHandlerRoutes.GetRoute(messageType);
-            var sharedRouteAction = sharedRoute.Actions.Single();
-            Time("Routemeister manual Route - Shared handler", numOfCalls, envelope => sharedRouteAction(envelope));
-
-            var route = sharedHandlerRoutes.GetRoute(messageType);
+            var route = routes.GetRoute(messageType);
             var routeAction = route.Actions.Single();
-            Time("Routemeister manual Route - New handler", numOfCalls, envelope => routeAction(envelope));
+            Time("Routemeister manual Route - Shared handler", numOfCalls, envelope => routeAction.Invoke(handler, envelope.Message));
+            Time("Routemeister manual Route - New handler", numOfCalls, envelope => routeAction.Invoke(new SampleHandler(), envelope.Message));
         }
 
         private static async void Time(string testCase, int numOfCalls, Func<MessageEnvelope, Task> dispatch)

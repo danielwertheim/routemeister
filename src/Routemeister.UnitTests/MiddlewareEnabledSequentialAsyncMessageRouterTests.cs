@@ -9,17 +9,17 @@ using Routemeister.Routers;
 namespace Routemeister.UnitTests
 {
     [TestFixture]
-    public class MiddlewareEnabledSequentialAsyncMessageRouterTests : UnitTestsOf<MiddlewareEnabledSequentialAsyncMessageRouter>
+    public class MiddlewareEnabledSequentialAsyncMessageRouterTests : UnitTestsOf<MiddlewareEnabledAsyncMessageRouter>
     {
         protected override void OnBeforeEachTest()
         {
-            var factory = new MessageRouteFactory((t, e) => Activator.CreateInstance(t));
+            var factory = new MessageRouteFactory();
             var routes = new MessageRoutes
             {
                 factory.Create(new[] {GetType().Assembly}, typeof (IHandle<>))
             };
 
-            UnitUnderTest = new MiddlewareEnabledSequentialAsyncMessageRouter(routes);
+            UnitUnderTest = new MiddlewareEnabledAsyncMessageRouter((t, e) => Activator.CreateInstance(t), routes);
         }
 
         [Test]

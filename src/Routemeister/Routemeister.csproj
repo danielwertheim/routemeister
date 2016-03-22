@@ -42,15 +42,16 @@
     </Compile>
     <Compile Include="IlMessageHandlerInvokerFactory.cs" />
     <Compile Include="IAsyncMessageRouter.cs" />
+    <Compile Include="IMessageHandlerAction.cs" />
     <Compile Include="MessageEnvelope.cs" />
     <Compile Include="MessageHandlerCreator.cs" />
     <Compile Include="MessageHandlerInvoker.cs" />
     <Compile Include="MessageRoute.cs" />
-    <Compile Include="MessageHandlerInfo.cs" />
+    <Compile Include="MessageHandlerAction.cs" />
     <Compile Include="MessageRouteFactory.cs" />
     <Compile Include="MessageRoutes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Routers\MiddlewareEnabledSequentialAsyncMessageRouter.cs" />
+    <Compile Include="Routers\MiddlewareEnabledAsyncMessageRouter.cs" />
     <Compile Include="Routers\SequentialAsyncMessageRouter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

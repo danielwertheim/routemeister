@@ -61,7 +61,7 @@ namespace Routemeister
 
             return _state.TryGetValue(messageType, out route)
                 ? route
-                : new MessageRoute(messageType);
+                : MessageRoute.Empty(messageType);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

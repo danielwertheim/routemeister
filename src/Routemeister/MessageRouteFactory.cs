@@ -2,27 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Routemeister
 {
     public class MessageRouteFactory
     {
-        protected MessageHandlerCreator MessageHandlerCreator { get; }
-
-        /// <summary>
-        /// Creates the factory. Use the <paramref name="messageHandlerCreator"/> to hook
-        /// in a strategy for how the message handlers instances should be created, e.g. using your IoC.
-        /// </summary>
-        /// <param name="messageHandlerCreator"></param>
-        public MessageRouteFactory(MessageHandlerCreator messageHandlerCreator)
-        {
-            if (messageHandlerCreator == null)
-                throw new ArgumentNullException(nameof(messageHandlerCreator));
-
-            MessageHandlerCreator = messageHandlerCreator;
-        }
-
         /// <summary>
         /// Creates message routes.
         /// </summary>
@@ -51,33 +35,12 @@ namespace Routemeister
             EnsureValidAssemblies(assemblies);
             EnsureValidMessageHandlerMarker(messageHandlerMarker);
 
-            var messageRoutes = new Dictionary<Type, List<Func<MessageEnvelope, Task>>>();
+            var messageHandlerActions = GetMessageHandlerActions(assemblies, messageHandlerMarker);
+            var routes = messageHandlerActions
+                .GroupBy(action => action.MessageType)
+                .Select(a => new MessageRoute(a.Key, a.ToArray()));
 
-            foreach (var groupedMessageHandlerInfos in GetMessageHandlerInfos(assemblies, messageHandlerMarker).GroupBy(i => i.Key))
-            {
-                foreach (var messageHandlerInfo in groupedMessageHandlerInfos.SelectMany(i => i.Value))
-                {
-                    var messageHandler = CreateMessageHandler(messageHandlerInfo);
-
-                    List<Func<MessageEnvelope, Task>> messageHandlers;
-                    if (!messageRoutes.TryGetValue(messageHandlerInfo.MessageType, out messageHandlers))
-                        messageRoutes[messageHandlerInfo.MessageType] = new List<Func<MessageEnvelope, Task>>();
-
-                    messageRoutes[messageHandlerInfo.MessageType].Add(messageHandler);
-                }
-            }
-
-            return new MessageRoutes
-            {
-                messageRoutes.Select(mr => new MessageRoute(mr.Key, mr.Value.ToArray()))
-            };
-        }
-
-        private Func<MessageEnvelope, Task> CreateMessageHandler(MessageHandlerInfo messageHandlerInfo)
-        {
-            return envelope => messageHandlerInfo.MessageHandlerInvoker.Invoke(
-                MessageHandlerCreator(messageHandlerInfo.MessageHandlerContainerType, envelope),
-                envelope.Message);
+            return new MessageRoutes().Add(routes);
         }
 
         private static void EnsureValidAssemblies(Assembly[] assemblies)
@@ -121,26 +84,19 @@ namespace Routemeister
                     nameof(messageHandlerMarker));
         }
 
-        private static IEnumerable<KeyValuePair<Type, MessageHandlerInfo[]>> GetMessageHandlerInfos(IEnumerable<Assembly> assemblies, Type messageHandlerMarker)
+        private static IEnumerable<IMessageHandlerAction> GetMessageHandlerActions(IEnumerable<Assembly> assemblies, Type messageHandlerMarker)
         {
             var messageHandlerMethodName = ExtractMessageHandlerMethodName(messageHandlerMarker);
 
             return assemblies
                 .SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
-                .Select(messageHandlerContainerType => new
-                {
-                    MessageHandlerContainerType = messageHandlerContainerType,
-                    MessageHandlers = messageHandlerContainerType
-                        .GetInterfaces()
-                        .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == messageHandlerMarker)
-                        .Select(i => new MessageHandlerInfo(
-                            messageHandlerContainerType,
-                            i.GetGenericArguments()[0],
-                            GetMessageHandlerInvoker(messageHandlerContainerType, i.GetGenericArguments()[0], messageHandlerMethodName)))
-                        .ToArray()
-                })
-                .Where(subscription => subscription.MessageHandlers.Any())
-                .Select(subscription => new KeyValuePair<Type, MessageHandlerInfo[]>(subscription.MessageHandlerContainerType, subscription.MessageHandlers));
+                .SelectMany(handlerType => handlerType
+                    .GetInterfaces()
+                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == messageHandlerMarker)
+                    .Select(i => new MessageHandlerAction(
+                        handlerType,
+                        i.GetGenericArguments()[0],
+                        GetMessageHandlerInvoker(handlerType, i.GetGenericArguments()[0], messageHandlerMethodName))));
         }
 
         private static string ExtractMessageHandlerMethodName(Type messageHandlerMarker)

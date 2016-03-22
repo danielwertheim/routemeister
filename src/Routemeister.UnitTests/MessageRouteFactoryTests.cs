@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
@@ -11,7 +10,7 @@ namespace Routemeister.UnitTests
     {
         protected override void OnBeforeEachTest()
         {
-            UnitUnderTest = new MessageRouteFactory((t, e) => Activator.CreateInstance(t));
+            UnitUnderTest = new MessageRouteFactory();
         }
 
         [Test]
