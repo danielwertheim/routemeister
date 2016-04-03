@@ -31,9 +31,8 @@ namespace Routemeister.Routers
 
         public async Task RouteAsync<T>(T message)
         {
-            var messageType = message.GetType();
-            var route = _messageRoutes.GetRoute(messageType);
-            var envelope = new MessageEnvelope(message, messageType);
+            var route = _messageRoutes.GetRoute(message.GetType());
+            var envelope = new MessageEnvelope(message, route.MessageType);
 
             if (!_middlewares.Any())
                 foreach (var action in route.Actions)
