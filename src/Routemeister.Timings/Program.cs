@@ -21,9 +21,9 @@ namespace Routemeister.Timings
 
             /***** ROUTEMEISTER *****/
             var routeFactory = new MessageRouteFactory();
-            var routes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof (IMyHandlerOf<>));
-            var sharedHandlerRouter = new SequentialAsyncMessageRouter((t, e) => handler, routes);
-            var newHandlerRouter = new SequentialAsyncMessageRouter((t, e) => new SampleHandler(), routes);
+            var routes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyHandlerOf<>));
+            var sharedHandlerRouter = new SequentialAsyncRouter((t, e) => handler, routes);
+            var newHandlerRouter = new SequentialAsyncRouter((t, e) => new SampleHandler(), routes);
 
             Time("Routemeister - Shared handler", numOfCalls, sharedHandlerRouter.RouteAsync);
             Time("Routemeister - New handler", numOfCalls, newHandlerRouter.RouteAsync);

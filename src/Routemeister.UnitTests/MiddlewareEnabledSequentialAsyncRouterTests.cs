@@ -9,7 +9,7 @@ using Routemeister.Routers;
 namespace Routemeister.UnitTests
 {
     [TestFixture]
-    public class MiddlewareEnabledSequentialAsyncMessageRouterTests : UnitTestsOf<MiddlewareEnabledAsyncMessageRouter>
+    public class MiddlewareEnabledSequentialAsyncRouterTests : UnitTestsOf<MiddlewareEnabledAsyncRouter>
     {
         protected override void OnBeforeEachTest()
         {
@@ -19,7 +19,7 @@ namespace Routemeister.UnitTests
                 factory.Create(new[] {GetType().Assembly}, typeof (IHandle<>))
             };
 
-            UnitUnderTest = new MiddlewareEnabledAsyncMessageRouter((t, e) => Activator.CreateInstance(t), routes);
+            UnitUnderTest = new MiddlewareEnabledAsyncRouter((t, e) => Activator.CreateInstance(t), routes);
         }
 
         [Test]

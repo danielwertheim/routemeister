@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace Routemeister.Routers
 {
-    public class MiddlewareEnabledAsyncMessageRouter : IAsyncMessageRouter
+    public class MiddlewareEnabledAsyncRouter : IAsyncRouter
     {
         private readonly MessageHandlerCreator _messageHandlerCreator;
         private readonly MessageRoutes _messageRoutes;
         private readonly Stack<Func<Func<MessageEnvelope, Task>, Func<MessageEnvelope, Task>>> _middlewares;
 
-        public MiddlewareEnabledAsyncMessageRouter(MessageHandlerCreator messageHandlerCreator, MessageRoutes messageRoutes)
+        public MiddlewareEnabledAsyncRouter(MessageHandlerCreator messageHandlerCreator, MessageRoutes messageRoutes)
         {
             if (messageHandlerCreator == null)
                 throw new ArgumentNullException(nameof(messageHandlerCreator));

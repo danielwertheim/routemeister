@@ -59,9 +59,9 @@
     <Compile Include="MessageEnvelopeTests.cs" />
     <Compile Include="MessageRouteFactoryTests.cs" />
     <Compile Include="MessageRoutesTests.cs" />
-    <Compile Include="MiddlewareEnabledSequentialAsyncMessageRouterTests.cs" />
+    <Compile Include="MiddlewareEnabledSequentialAsyncRouterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SequentialAsyncMessageRouterTests.cs" />
+    <Compile Include="SequentialAsyncRouterTests.cs" />
     <Compile Include="UnitTestsOf.cs" />
   </ItemGroup>
   <ItemGroup>

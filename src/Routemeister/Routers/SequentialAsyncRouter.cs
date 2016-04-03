@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace Routemeister.Routers
 {
-    public class SequentialAsyncMessageRouter : IAsyncMessageRouter
+    public class SequentialAsyncRouter : IAsyncRouter
     {
         private readonly MessageHandlerCreator _messageHandlerCreator;
         private readonly MessageRoutes _messageRoutes;
 
-        public SequentialAsyncMessageRouter(MessageHandlerCreator messageHandlerCreator, MessageRoutes messageRoutes)
+        public SequentialAsyncRouter(MessageHandlerCreator messageHandlerCreator, MessageRoutes messageRoutes)
         {
             if (messageHandlerCreator == null)
                 throw new ArgumentNullException(nameof(messageHandlerCreator));
