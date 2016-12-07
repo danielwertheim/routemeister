@@ -51,6 +51,7 @@
     <Compile Include="MessageRouteFactory.cs" />
     <Compile Include="MessageRoutes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routers\EmptyAsyncRouter.cs" />
     <Compile Include="Routers\MiddlewareEnabledAsyncRouter.cs" />
     <Compile Include="Routers\SequentialAsyncRouter.cs" />
   </ItemGroup>
