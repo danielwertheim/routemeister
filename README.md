@@ -113,8 +113,9 @@ If you are interested... Each message route has a `MessageType` and one-to-many 
 ## Use the routes
 The `routes` can now be used as you want to route messages manually, or you can start using an existing router:
 
-- `SequentialAsyncMessageRouter`
-- `MiddlewareEnabledAsyncMessageRouter`
+- `SequentialAsyncMessageRouter.RouteAsync(...)`
+- `MiddlewareEnabledAsyncMessageRouter.RouteAsync(...)`
+- `AsyncDispatcher.SendAsync(...) | PublishAsync(...) | RequestAsync<TResponse>(...)`
 
 Neither of these routers are complex. They route sequentially and fail immediately if an exception is thrown. The simplest one is `SequentialAsyncMessageRouter`. Go and have a look. **You can easily create your own**.
 
