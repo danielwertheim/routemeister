@@ -36,19 +36,20 @@ namespace Routemeister.Routers
 
             if (!_middlewares.Any())
                 foreach (var action in route.Actions)
-                    await action.Invoke(_messageHandlerCreator(action.HandlerType, envelope), envelope.Message).ConfigureAwait(false);
+                    await action.Invoke(
+                        _messageHandlerCreator(action.HandlerType, envelope),
+                        envelope.Message).ConfigureAwait(false);
             else
                 foreach (var action in route.Actions)
                     await ProcessAsync(
                         envelope,
-                        async e => await action.Invoke(_messageHandlerCreator(action.HandlerType, envelope), envelope.Message).ConfigureAwait(false)).ConfigureAwait(false);
+                        async e => await action.Invoke(
+                            _messageHandlerCreator(action.HandlerType, envelope),
+                            envelope.Message).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         private async Task ProcessAsync(MessageEnvelope envelope, Func<MessageEnvelope, Task> root)
         {
-            if (!_middlewares.Any())
-                return;
-
             Func<MessageEnvelope, Task> prev;
 
             using (var e = _middlewares.GetEnumerator())
@@ -58,11 +59,11 @@ namespace Routemeister.Routers
 
                 prev = e.Current.Invoke(root);
                 while (e.MoveNext())
-                    prev = e.Current(prev);
+                    prev = e.Current.Invoke(prev);
             }
 
             if (prev != null)
-                await prev(envelope).ConfigureAwait(false);
+                await prev.Invoke(envelope).ConfigureAwait(false);
         }
     }
 }
