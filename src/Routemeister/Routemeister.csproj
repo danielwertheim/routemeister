@@ -40,9 +40,13 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Dispatchers\AsyncDispatcher.cs" />
+    <Compile Include="IAsyncDispatcher.cs" />
+    <Compile Include="IAsyncRequestHandler.cs" />
     <Compile Include="IlMessageHandlerInvokerFactory.cs" />
     <Compile Include="IAsyncRouter.cs" />
     <Compile Include="IMessageHandlerAction.cs" />
+    <Compile Include="IRequest.cs" />
     <Compile Include="MessageEnvelope.cs" />
     <Compile Include="MessageHandlerCreator.cs" />
     <Compile Include="MessageHandlerInvoker.cs" />
