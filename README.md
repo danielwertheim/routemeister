@@ -154,9 +154,21 @@ The `MessageEnvelope` is something you could make use of to carry state e.g. usi
 
 Sample using [Autofac Lifetime scopes](http://docs.autofac.org/en/latest/lifetime/working-with-scopes.html) to get per request resolving
 
+**Sample using** `SequentialAsyncMessageRouter`
+```csharp
+var router = new SequentialAsyncMessageRouter(
+    (handlerType, envelope) => envelope.GetScope().Resolve(handlerType),
+    routes)
+{
+    OnBeforeRouting = envelope => envelope.SetScope(parentscope.BeginLifetimeScope()),
+    OnAfterRouted = envelope => envelope.GetScope()?.Dispose()
+};
+```
+
+**Sample using** `MiddlewareEnabledAsyncMessageRouter`
 ```csharp
 var router = new MiddlewareEnabledAsyncMessageRouter(
-    (handlerType, envelope) => envelope.GetScope(handlerType),
+    (handlerType, envelope) => envelope.GetScope().Resolve(handlerType),
     routes);
 
 router.Use(next => async envelope =>
