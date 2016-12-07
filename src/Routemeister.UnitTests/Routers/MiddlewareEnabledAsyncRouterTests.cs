@@ -6,10 +6,10 @@ using FluentAssertions;
 using NUnit.Framework;
 using Routemeister.Routers;
 
-namespace Routemeister.UnitTests
+namespace Routemeister.UnitTests.Routers
 {
     [TestFixture]
-    public class MiddlewareEnabledSequentialAsyncRouterTests : UnitTestsOf<MiddlewareEnabledAsyncRouter>
+    public class MiddlewareEnabledAsyncRouterTests : UnitTestsOf<MiddlewareEnabledAsyncRouter>
     {
         protected override void OnBeforeEachTest()
         {

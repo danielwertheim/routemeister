@@ -5,7 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using Routemeister.Routers;
 
-namespace Routemeister.UnitTests
+namespace Routemeister.UnitTests.Routers
 {
     [TestFixture]
     public class SequentialAsyncRouterTests : UnitTestsOf<SequentialAsyncRouter>
