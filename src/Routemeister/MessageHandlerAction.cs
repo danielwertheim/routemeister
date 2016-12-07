@@ -21,6 +21,11 @@ namespace Routemeister
             if (invoker == null)
                 throw new ArgumentNullException(nameof(invoker));
 
+            if (messageType.IsValueType)
+                throw new ArgumentException(
+                    $"The message type {messageType.FullName} is a value type. In order to get away from boxing and unboxing, please do not use value types.",
+                    nameof(messageType));
+
             HandlerType = handlerType;
             MessageType = messageType;
             Invoker = invoker;
