@@ -40,6 +40,8 @@ public interface IHandle<in T>
 }
 ```
 
+**For convenience**, there is a pre-defined handler interface that you can use if you don't want to define your own: `IAsyncMessageHandlerOf<T>`.
+
 Use this interface to create some concrete handlers (classes implementing your interface). Each class can naturally implement the interface multiple times to handle different types of messages. Each message type being processed can (if you want) be processed by multiple message handlers (different classes).
 
 ```csharp
