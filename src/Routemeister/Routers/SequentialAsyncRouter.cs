@@ -8,6 +8,9 @@ namespace Routemeister.Routers
         private readonly MessageHandlerCreator _messageHandlerCreator;
         private readonly MessageRoutes _messageRoutes;
 
+        public Action<MessageEnvelope> OnBeforeRouting { private get; set; }
+        public Action<MessageEnvelope> OnAfterRouted { private get; set; }
+
         public SequentialAsyncRouter(MessageHandlerCreator messageHandlerCreator, MessageRoutes messageRoutes)
         {
             if (messageHandlerCreator == null)
@@ -25,8 +28,17 @@ namespace Routemeister.Routers
             var route = _messageRoutes.GetRoute(message.GetType());
             var envelope = new MessageEnvelope(message, route.MessageType);
 
-            foreach (var action in route.Actions)
-                await action.Invoke(_messageHandlerCreator(action.HandlerType,envelope), envelope.Message).ConfigureAwait(false);
+            OnBeforeRouting?.Invoke(envelope);
+
+            try
+            {
+                foreach (var action in route.Actions)
+                    await action.Invoke(_messageHandlerCreator(action.HandlerType, envelope), envelope.Message).ConfigureAwait(false);
+            }
+            finally
+            {
+                OnAfterRouted?.Invoke(envelope);
+            }
         }
     }
 }

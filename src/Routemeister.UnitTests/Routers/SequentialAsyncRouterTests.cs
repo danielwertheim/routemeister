@@ -42,6 +42,20 @@ namespace Routemeister.UnitTests.Routers
             });
         }
 
+        [Test]
+        public async Task Should_invoke_OnBeforeRouting_and_OnAfterRouter_and_pass_state_When_specified()
+        {
+            var theState = Guid.NewGuid();
+            var interceptedMatchingState = false;
+            UnitUnderTest.OnBeforeRouting = envelope => envelope.SetState("TheState", theState);
+            UnitUnderTest.OnAfterRouted = envelope => interceptedMatchingState = Equals(envelope.GetState("TheState"), theState);
+
+            var concreteMessageA = new ConcreteMessageA();
+            await UnitUnderTest.RouteAsync(concreteMessageA);
+
+            interceptedMatchingState.Should().BeTrue();
+        }
+
         public interface IHandle<in T>
         {
             Task HandleAsync(T message);
