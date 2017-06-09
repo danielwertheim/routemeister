@@ -1,12 +1,11 @@
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 
 namespace Routemeister.UnitTests
 {
-    [TestFixture]
     public class MessageEnvelopeTests : UnitTestsOf<MessageEnvelope>
     {
-        [Test]
+        [Fact]
         public void Should_be_able_to_carry_state()
         {
             UnitUnderTest = new MessageEnvelope(new FakeMessage(), typeof(FakeMessage));

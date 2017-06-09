@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 
 namespace Routemeister.UnitTests
 {
-    [TestFixture]
     public class MessageRouteFactoryTests : UnitTestsOf<MessageRouteFactory>
     {
         protected override void OnBeforeEachTest()
@@ -13,20 +13,20 @@ namespace Routemeister.UnitTests
             UnitUnderTest = new MessageRouteFactory();
         }
 
-        [Test]
+        [Fact]
         public void Should_create_two_routes_with_two_actions_each_When_two_concrete_message_handlers_in_two_classes_exists()
         {
-            var routes = UnitUnderTest.Create(GetType().Assembly, typeof(IHandleForCaseA<>));
+            var routes = UnitUnderTest.Create(GetType().GetTypeInfo().Assembly, typeof(IHandleForCaseA<>));
 
             routes.Should().HaveCount(2);
             routes.Single(r => r.MessageType == typeof(ConcreteMessageA)).Actions.Should().HaveCount(2);
             routes.Single(r => r.MessageType == typeof(ConcreteMessageB)).Actions.Should().HaveCount(2);
         }
 
-        [Test]
+        [Fact]
         public void Should_create_two_routes_with_two_actions_each_When_two_interface_message_handlers_in_two_classes_exists()
         {
-            var routes = UnitUnderTest.Create(GetType().Assembly, typeof(IHandleForCaseB<>));
+            var routes = UnitUnderTest.Create(GetType().GetTypeInfo().Assembly, typeof(IHandleForCaseB<>));
 
             routes.Should().HaveCount(2);
             routes.Single(r => r.MessageType == typeof(INonConcreteMessageA)).Actions.Should().HaveCount(2);

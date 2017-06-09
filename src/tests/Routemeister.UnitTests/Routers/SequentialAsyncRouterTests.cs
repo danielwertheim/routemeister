@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NUnit.Framework;
 using Routemeister.Routers;
+using Xunit;
 
 namespace Routemeister.UnitTests.Routers
 {
-    [TestFixture]
     public class SequentialAsyncRouterTests : UnitTestsOf<SequentialAsyncRouter>
     {
         protected override void OnBeforeEachTest()
@@ -15,13 +15,13 @@ namespace Routemeister.UnitTests.Routers
             var factory = new MessageRouteFactory();
             var routes = new MessageRoutes
             {
-                factory.Create(new[] {GetType().Assembly}, typeof (IHandle<>))
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IHandle<>))
             };
 
             UnitUnderTest = new SequentialAsyncRouter((t, e) => Activator.CreateInstance(t), routes);
         }
 
-        [Test]
+        [Fact]
         public async Task Should_route()
         {
             var concreteMessageA = new ConcreteMessageA();
@@ -42,7 +42,7 @@ namespace Routemeister.UnitTests.Routers
             });
         }
 
-        [Test]
+        [Fact]
         public async Task Should_invoke_OnBeforeRouting_and_OnAfterRouter_and_pass_state_When_specified()
         {
             var theState = Guid.NewGuid();

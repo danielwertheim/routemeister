@@ -4,10 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Routemeister;
 using Routemeister.Dispatchers;
 using Routemeister.Routers;
 
-namespace Routemeister.Timings
+namespace Timings
 {
     class Program
     {
@@ -23,9 +24,10 @@ namespace Routemeister.Timings
             Time<MyRequest>("Pure C# Request - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m));
 
             /***** ROUTEMEISTER *****/
+            var sampleAssembly = typeof(Program).GetTypeInfo().Assembly;
             var routeFactory = new MessageRouteFactory();
-            var routes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyHandlerOf<>));
-            var reqRoutes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyRequestHandlerOf<,>));
+            var routes = routeFactory.Create(sampleAssembly, typeof(IMyHandlerOf<>));
+            var reqRoutes = routeFactory.Create(sampleAssembly, typeof(IMyRequestHandlerOf<,>));
             var sharedHandlerRouter = new SequentialAsyncRouter((t, e) => handler, routes);
             var newHandlerRouter = new SequentialAsyncRouter((t, e) => new SampleHandler(), routes);
             var asyncDispatcherSharedHandler = new AsyncDispatcher((t, e) => handler, reqRoutes);

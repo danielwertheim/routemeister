@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\projects\Routemeister\Routemeister.csproj" />
   </ItemGroup>
 

@@ -13,7 +13,7 @@ namespace Routemeister
                 $"{methodInfo.Name}@{methodInfo.DeclaringType.FullName}",
                 typeof(Task),
                 new[] { typeof(object), typeof(object) },
-                methodInfo.DeclaringType?.Module ?? methodInfo.Module);
+                methodInfo.DeclaringType?.GetTypeInfo().Module ?? methodInfo.Module);
             var il = dynamicMethod.GetILGenerator();
 
             var paramTypes = methodInfo.GetParameters().Select(p => p.ParameterType).ToArray();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Routemeister;
@@ -7,12 +8,17 @@ using Routemeister.Routers;
 
 namespace AutofacSample
 {
+    public static class SampleAssembly
+    {
+        public static readonly Assembly Item = typeof(Program).GetTypeInfo().Assembly;
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterAssemblyModules(typeof(Program).Assembly);
+            builder.RegisterAssemblyModules(SampleAssembly.Item);
             var container = builder.Build();
 
             Console.WriteLine($"===== Using {nameof(MiddlewareEnabledAsyncRouter)} =====");
@@ -83,7 +89,7 @@ namespace AutofacSample
         }
     }
 
-    public class OurModule : Module
+    public class OurModule : Autofac.Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -93,7 +99,7 @@ namespace AutofacSample
                     var factory = new MessageRouteFactory();
 
                     return factory.Create(
-                        typeof(Program).Assembly,
+                        SampleAssembly.Item,
                         typeof(IAsyncMessageHandler<>));
                 })
                 .SingleInstance();

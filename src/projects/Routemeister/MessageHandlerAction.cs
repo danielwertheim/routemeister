@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Routemeister
@@ -21,7 +22,7 @@ namespace Routemeister
             if (invoker == null)
                 throw new ArgumentNullException(nameof(invoker));
 
-            if (messageType.IsValueType)
+            if (messageType.GetTypeInfo().IsValueType)
                 throw new ArgumentException(
                     $"The message type {messageType.FullName} is a value type. In order to get away from boxing and unboxing, please do not use value types.",
                     nameof(messageType));

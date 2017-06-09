@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NUnit.Framework;
 using Routemeister.Dispatchers;
+using Xunit;
 
 namespace Routemeister.UnitTests.Dispatchers
 {
-    [TestFixture]
     public class AsyncDispatcherTests : UnitTestsOf<AsyncDispatcher>
     {
         protected override void OnBeforeEachTest()
@@ -15,14 +15,14 @@ namespace Routemeister.UnitTests.Dispatchers
             var factory = new MessageRouteFactory();
             var routes = new MessageRoutes
             {
-                factory.Create(new[] {GetType().Assembly}, typeof (IAsyncMessageHandler<>)),
-                factory.Create(new[] {GetType().Assembly}, typeof (IAsyncRequestHandler<,>))
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IAsyncMessageHandler<>)),
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IAsyncRequestHandler<,>))
             };
 
             UnitUnderTest = new AsyncDispatcher((t, e) => Activator.CreateInstance(t), routes);
         }
 
-        [Test]
+        [Fact]
         public async Task SendAsync_Should_send_to_single_receiver()
         {
             var concreteMessageA = new ConcreteMessageA();
@@ -35,7 +35,7 @@ namespace Routemeister.UnitTests.Dispatchers
             });
         }
 
-        [Test]
+        [Fact]
         public async Task PublishAsync_Should_publish_to_multiple_receivers()
         {
             var concreteMessageB = new ConcreteMessageB();
@@ -49,7 +49,7 @@ namespace Routemeister.UnitTests.Dispatchers
             });
         }
 
-        [Test]
+        [Fact]
         public async Task RequestAsync_Should_send_to_single_receiver()
         {
             var requestMessage = new RequestMessage();
@@ -62,7 +62,7 @@ namespace Routemeister.UnitTests.Dispatchers
             });
         }
 
-        [Test]
+        [Fact]
         public async Task SendAsync_Should_invoke_OnBeforeRouting_and_OnAfterRouter_and_pass_state_When_specified()
         {
             var theState = Guid.NewGuid();
@@ -76,7 +76,7 @@ namespace Routemeister.UnitTests.Dispatchers
             interceptedMatchingState.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public async Task PublishAsync_Should_invoke_OnBeforeRouting_and_OnAfterRouter_and_pass_state_When_specified()
         {
             var theState = Guid.NewGuid();
@@ -90,7 +90,7 @@ namespace Routemeister.UnitTests.Dispatchers
             interceptedMatchingState.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public async Task RequestAsync_Should_invoke_OnBeforeRouting_and_OnAfterRouter_and_pass_state_When_specified()
         {
             var theState = Guid.NewGuid();

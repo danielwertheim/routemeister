@@ -1,11 +1,10 @@
 ﻿using System;
 using FluentAssertions;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 
 namespace Routemeister.UnitTests
 {
-    [TestFixture]
     public class MessageRoutesTests : UnitTestsOf<MessageRoutes>
     {
         protected override void OnBeforeEachTest()
@@ -13,7 +12,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest = new MessageRoutes();
         }
 
-        [Test]
+        [Fact]
         public void Add_of_enumerable_Should_add_two_When_two_routes_are_passed()
         {
             var routes = new[]
@@ -27,7 +26,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest.Should().Contain(routes);
         }
 
-        [Test]
+        [Fact]
         public void Add_of_single_Should_add()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
@@ -37,7 +36,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest.Should().Contain(route);
         }
 
-        [Test]
+        [Fact]
         public void Add_of_single_Should_not_add_When_same_route_is_added_twice()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
@@ -48,7 +47,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest.Should().HaveCount(1);
         }
 
-        [Test]
+        [Fact]
         public void Add_of_single_Should_add_When_two_routes_with_different_message_type_are_added()
         {
             var routeA = CreateMessageRoute<ConcreteMessageA>();
@@ -60,7 +59,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest.Should().HaveCount(2);
         }
 
-        [Test]
+        [Fact]
         public void Add_of_single_Should_not_add_When_two_routes_with_same_message_type_are_added()
         {
             var routeA1 = CreateMessageRoute<ConcreteMessageA>();
@@ -74,13 +73,13 @@ namespace Routemeister.UnitTests
                 .WithMessage("Route for message type 'ConcreteMessageA' already exists.");
         }
 
-        [Test]
+        [Fact]
         public void IsEmpty_Should_return_false_When_no_routes_has_been_added()
         {
             UnitUnderTest.IsEmpty.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void IsEmpty_Should_return_true_When_routes_has_been_added()
         {
             UnitUnderTest.Add(CreateMessageRoute<ConcreteMessageA>());
@@ -88,13 +87,13 @@ namespace Routemeister.UnitTests
             UnitUnderTest.IsEmpty.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void KnownMessageTypes_Should_yield_no_types_When_no_routes_has_been_added()
         {
             UnitUnderTest.KnownMessageTypes.Should().BeEmpty();
         }
 
-        [Test]
+        [Fact]
         public void KnownMessageTypes_Should_yield_message_types_When_routes_has_been_added()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
@@ -103,7 +102,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest.KnownMessageTypes.Should().Contain(route.MessageType);
         }
 
-        [Test]
+        [Fact]
         public void Indexer_Should_yield_route_by_message_type_When_route_for_it_exists()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
@@ -112,7 +111,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest[route.MessageType].Should().Be(route);
         }
 
-        [Test]
+        [Fact]
         public void HasRoute_Should_return_false_When_no_route_exist_for_message_type()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
@@ -121,7 +120,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest.HasRoute(typeof(ConcreteMessageB)).Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void HasRoute_Should_return_true_When_route_exist_for_message_type()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
@@ -130,7 +129,7 @@ namespace Routemeister.UnitTests
             UnitUnderTest.HasRoute(route.MessageType).Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GetRoute_Should_return_empty_route_When_no_route_exist_for_message_type()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();
@@ -142,7 +141,7 @@ namespace Routemeister.UnitTests
             retrievedRoute.Actions.Should().BeEmpty();
         }
 
-        [Test]
+        [Fact]
         public void GetRoute_Should_return_route_When_route_exist_for_message_type()
         {
             var route = CreateMessageRoute<ConcreteMessageA>();

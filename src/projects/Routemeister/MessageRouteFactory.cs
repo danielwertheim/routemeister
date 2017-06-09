@@ -57,12 +57,14 @@ namespace Routemeister
             if (messageHandlerMarker == null)
                 throw new ArgumentNullException(nameof(messageHandlerMarker));
 
-            if (!messageHandlerMarker.IsInterface)
+            var typeInfo = messageHandlerMarker.GetTypeInfo();
+
+            if (!typeInfo.IsInterface)
                 throw new ArgumentException(
                     "The message handler marker interface needs to be an interface.",
                     nameof(messageHandlerMarker));
 
-            if (!messageHandlerMarker.IsGenericType)
+            if (!typeInfo.IsGenericType)
                 throw new ArgumentException(
                     "The message handler marker interface needs to be a generic interface.",
                     nameof(messageHandlerMarker));
@@ -78,7 +80,7 @@ namespace Routemeister
                     "The message handler marker interface needs to have exactly one method accepting only one argument (the message being routed).",
                     nameof(messageHandlerMarker));
 
-            if (messageHandlerMarker.GetMembers().Any(m => m != method))
+            if (messageHandlerMarker.GetMembers().Any(m => !m.Equals(method)))
                 throw new ArgumentException(
                     "The message handler marker interface needs to have exactly one member being the method handling the message being routed.",
                     nameof(messageHandlerMarker));
@@ -89,14 +91,18 @@ namespace Routemeister
             var messageHandlerMethodName = ExtractMessageHandlerMethodName(messageHandlerMarker);
 
             return assemblies
-                .SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
-                .SelectMany(handlerType => handlerType
+                .SelectMany(a => a
+                    .GetTypes()
+                    .Select(t => new { Type = t, Info = t.GetTypeInfo() })
+                    .Where(ht => ht.Info.IsClass && !ht.Info.IsAbstract))
+                .SelectMany(ht => ht.Type
                     .GetInterfaces()
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == messageHandlerMarker)
-                    .Select(i => new MessageHandlerAction(
-                        handlerType,
-                        i.GetGenericArguments()[0],
-                        GetMessageHandlerInvoker(handlerType, i.GetGenericArguments()[0], messageHandlerMethodName))));
+                    .Select(it => new { Type = it, Info = it.GetTypeInfo() })
+                    .Where(it => it.Info.IsGenericType && it.Type.GetGenericTypeDefinition() == messageHandlerMarker)
+                    .Select(hti => new MessageHandlerAction(
+                        ht.Type,
+                        hti.Type.GetGenericArguments()[0],
+                        GetMessageHandlerInvoker(ht.Type, hti.Type.GetGenericArguments()[0], messageHandlerMethodName))));
         }
 
         private static string ExtractMessageHandlerMethodName(Type messageHandlerMarker)

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NUnit.Framework;
 using Routemeister.Routers;
+using Xunit;
 
 namespace Routemeister.UnitTests.Routers
 {
-    [TestFixture]
     public class MiddlewareEnabledAsyncRouterTests : UnitTestsOf<MiddlewareEnabledAsyncRouter>
     {
         protected override void OnBeforeEachTest()
@@ -16,13 +16,13 @@ namespace Routemeister.UnitTests.Routers
             var factory = new MessageRouteFactory();
             var routes = new MessageRoutes
             {
-                factory.Create(new[] {GetType().Assembly}, typeof (IHandle<>))
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IHandle<>))
             };
 
             UnitUnderTest = new MiddlewareEnabledAsyncRouter((t, e) => Activator.CreateInstance(t), routes);
         }
 
-        [Test]
+        [Fact]
         public async Task Should_route()
         {
             var concreteMessageA = new ConcreteMessageA();
@@ -43,7 +43,7 @@ namespace Routemeister.UnitTests.Routers
             });
         }
 
-        [Test]
+        [Fact]
         public async Task Should_invoke_middlewares_When_only_one_middleware_exists()
         {
             var interceptionsFromMiddlewares = new List<string>();
@@ -65,7 +65,7 @@ namespace Routemeister.UnitTests.Routers
                 "MW End ConcreteMessageB");
         }
 
-        [Test]
+        [Fact]
         public async Task Should_invoke_middlewares_When_more_then_one_middleware_exists()
         {
             var interceptionsFromMiddlewares = new List<string>();
@@ -98,7 +98,7 @@ namespace Routemeister.UnitTests.Routers
                 "MW1 End ConcreteMessageB");
         }
 
-        [Test]
+        [Fact]
         public async Task Should_not_invoke_third_middleware_When_second_terminates_chain()
         {
             var interceptionsFromMiddlewares = new List<string>();
@@ -136,7 +136,7 @@ namespace Routemeister.UnitTests.Routers
                 "MW1 End ConcreteMessageB");
         }
 
-        [Test]
+        [Fact]
         public async Task Should_be_able_to_pass_envelope_state()
         {
             var interceptionsFromMiddlewares = new List<string>();
