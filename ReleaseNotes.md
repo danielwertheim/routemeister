@@ -1,4 +1,10 @@
-#Release notes
+# Release notes
+
+## v2.0.0 - 2017-06-xx
+-**[New]:** Added concept of dispatchers with first implementation being `AsyncDispatcher`, which supports: `SendAsync`, `PublishAsync` and `RequestAsync`.
+-**[New]:** Added support for simple hooks `OnBeforeRouting` and `OnAfterRouted` which **SIMPLIFIES** using e.g. Autofac scopes for your handlers, as in you do not have to use the `MiddlewareEnabledAsyncRouter` anymore to achieve this.
+-**[Breaking]:** Renamed: `SequentialAsyncMessageRouter` to `SequentialAsyncRouter`.
+-**[Breaking]:** Renamed: `MiddlewareEnabledAsyncMessageRouter` to `MiddlewareEnabledAsyncRouter`.
 
 ## v1.0.0 - 2016-03-22
 With this rewrite, the API is now considered stable and no more breaking changes are planned.
