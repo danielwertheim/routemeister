@@ -1,6 +1,7 @@
 # Release notes
 
 ## v2.0.0 - 2017-06-xx
+- **[New]:** Targets .NET Standard 1.4 instead of .NET 4.5
 - **[New]:** Added concept of dispatchers with first implementation being `AsyncDispatcher`, which supports: `SendAsync`, `PublishAsync` and `RequestAsync`.
 - **[New]:** Added support for simple hooks `OnBeforeRouting` and `OnAfterRouted` which **SIMPLIFIES** using e.g. Autofac scopes for your handlers, as in you do not have to use the `MiddlewareEnabledAsyncRouter` anymore to achieve this.
 - **[Breaking]:** Renamed: `SequentialAsyncMessageRouter` to `SequentialAsyncRouter`.
