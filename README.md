@@ -4,8 +4,9 @@ Routemeister is a small lib built with one single purpose. **Effectively perform
 It supports Routers and/or Dispatchers; the difference being the router just routes the message to the endpoint, while the dispatcher supports different messaging strategies like: `Send`, `Publish` and `Request-Response`.
 
 ## External writings
-- [Routemeister reaches v1](http://danielwertheim.se/routemeister-reaches-v1/)
+- [How to create a simple in memory aggregator using Routemeister](https://danielwertheim.se/how-to-create-a-simple-in-memory-aggregator-using-routemeister/)
 - [Routemeister how to support request response](http://danielwertheim.se/routemeister-how-to-support-request-response/)
+- [Routemeister reaches v1](http://danielwertheim.se/routemeister-reaches-v1/)
 - [Routemeister and middlewares](http://danielwertheim.se/routemeister-and-middlewares/)
 - [Routemeister and Autofac](http://danielwertheim.se/routemeister-and-autofac/)
 - [Reply to please compare Routemesiter with MediatR](http://danielwertheim.se/reply-to-please-compare-routemesiter-with-mediatr/)
