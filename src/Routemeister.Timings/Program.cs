@@ -19,11 +19,13 @@ namespace Routemeister.Timings
             var handler = new SampleHandler();
             Time<Message>("Pure C# - Shared handler", numOfCalls, handler.HandleAsync);
             Time<Message>("Pure C# - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m));
+            Time<MyRequest>("Pure C# Request - Shared handler", numOfCalls, handler.HandleAsync);
+            Time<MyRequest>("Pure C# Request - New handler", numOfCalls, m => new SampleHandler().HandleAsync(m));
 
             /***** ROUTEMEISTER *****/
             var routeFactory = new MessageRouteFactory();
             var routes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyHandlerOf<>));
-            var reqRoutes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyAsyncRequestHandlerOf<,>));
+            var reqRoutes = routeFactory.Create(Assembly.GetExecutingAssembly(), typeof(IMyRequestHandlerOf<,>));
             var sharedHandlerRouter = new SequentialAsyncRouter((t, e) => handler, routes);
             var newHandlerRouter = new SequentialAsyncRouter((t, e) => new SampleHandler(), routes);
             var asyncDispatcherSharedHandler = new AsyncDispatcher((t, e) => handler, reqRoutes);
@@ -88,14 +90,14 @@ namespace Routemeister.Timings
         Task HandleAsync(T message);
     }
 
-    public interface IMyAsyncRequestHandlerOf<in TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public interface IMyRequestHandlerOf<in TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         Task<TResponse> HandleAsync(TRequest request);
     }
 
     public class SampleHandler :
         IMyHandlerOf<Message>,
-        IMyAsyncRequestHandlerOf<MyRequest, MyResponse>
+        IMyRequestHandlerOf<MyRequest, MyResponse>
     {
         public Task HandleAsync(Message message)
         {

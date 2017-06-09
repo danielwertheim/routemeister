@@ -15,8 +15,8 @@ namespace Routemeister.UnitTests.Dispatchers
             var factory = new MessageRouteFactory();
             var routes = new MessageRoutes
             {
-                factory.Create(new[] {GetType().Assembly}, typeof (IHandle<>)),
-                factory.Create(new[] {GetType().Assembly}, typeof (IAsyncRequestHandlerOf<,>))
+                factory.Create(new[] {GetType().Assembly}, typeof (IAsyncMessageHandler<>)),
+                factory.Create(new[] {GetType().Assembly}, typeof (IAsyncRequestHandler<,>))
             };
 
             UnitUnderTest = new AsyncDispatcher((t, e) => Activator.CreateInstance(t), routes);
@@ -104,11 +104,6 @@ namespace Routemeister.UnitTests.Dispatchers
             interceptedMatchingState.Should().BeTrue();
         }
 
-        public interface IHandle<in T>
-        {
-            Task HandleAsync(T message);
-        }
-
         public class ConcreteMessageA
         {
             public ConcurrentBag<string> Data { get; } = new ConcurrentBag<string>();
@@ -122,9 +117,9 @@ namespace Routemeister.UnitTests.Dispatchers
         public class RequestMessage : IRequest<ConcurrentBag<string>> { }
 
         public class HandlerA :
-            IHandle<ConcreteMessageA>,
-            IHandle<ConcreteMessageB>,
-            IAsyncRequestHandlerOf<RequestMessage, ConcurrentBag<string>>
+            IAsyncMessageHandler<ConcreteMessageA>,
+            IAsyncMessageHandler<ConcreteMessageB>,
+            IAsyncRequestHandler<RequestMessage, ConcurrentBag<string>>
         {
             public Task HandleAsync(ConcreteMessageA message)
             {
@@ -150,7 +145,7 @@ namespace Routemeister.UnitTests.Dispatchers
         }
 
         public class HandlerB :
-            IHandle<ConcreteMessageB>
+            IAsyncMessageHandler<ConcreteMessageB>
         {
             public Task HandleAsync(ConcreteMessageB message)
             {

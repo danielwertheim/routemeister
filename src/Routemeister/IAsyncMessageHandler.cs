@@ -3,10 +3,11 @@
 namespace Routemeister
 {
     /// <summary>
-    /// One definition of a handler. Please note that you can define your own.
+    /// A premade definition of an async handler.
+    /// Please note, you can define your own interface for this.
     /// </summary>
     /// <typeparam name="TMessage"></typeparam>
-    public interface IAsyncMessageHandlerOf<in TMessage> where TMessage : class
+    public interface IAsyncMessageHandler<in TMessage> where TMessage : class
     {
         Task HandleAsync(TMessage message);
     }

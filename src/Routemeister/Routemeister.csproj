@@ -42,7 +42,7 @@
     </Compile>
     <Compile Include="Dispatchers\AsyncDispatcher.cs" />
     <Compile Include="IAsyncDispatcher.cs" />
-    <Compile Include="IAsyncHandlerOf.cs" />
+    <Compile Include="IAsyncMessageHandler.cs" />
     <Compile Include="IAsyncRequestHandler.cs" />
     <Compile Include="IlMessageHandlerInvokerFactory.cs" />
     <Compile Include="IAsyncRouter.cs" />
