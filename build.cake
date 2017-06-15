@@ -5,6 +5,7 @@ var config = BuildConfig.Create(Context, BuildSystem);
 Information("SrcDir: " + config.SrcDir);
 Information("OutDir: " + config.OutDir);
 Information("SemVer: " + config.SemVer);
+Information("IsDefaultBranch: " + config.IsDefaultBranch);
 Information("BuildVersion: " + config.BuildVersion);
 Information("BuildProfile: " + config.BuildProfile);
 Information("IsTeamCityBuild: " + config.IsTeamCityBuild);
