@@ -15,6 +15,7 @@
     <Version>0.0.0</Version>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Description>Used for in-process async message routing and dispatching. Provides construct for scanning assemblies finding types implementing a message handler marker interface of choice and builds routes from them that later can be used with custom or shipped in-process routers and dispatchers supporting: Send, Publish, Request.</Description>
+    <PackageTags>route routes router dispatcher messaging commands events in-process</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
