@@ -48,8 +48,8 @@ namespace Timings
             var messageType = typeof(Message);
             var route = routes.GetRoute(messageType);
             var routeAction = route.Actions.Single();
-            Time<Message>("Manual Route - Shared handler", numOfCalls, m => routeAction.Invoke(handler, m));
-            Time<Message>("Manual Route - New handler", numOfCalls, m => routeAction.Invoke(new SampleHandler(), m));
+            Time<Message>("Manual Route - Shared handler", numOfCalls, m => (Task)routeAction.Invoke(handler, m));
+            Time<Message>("Manual Route - New handler", numOfCalls, m => (Task)routeAction.Invoke(new SampleHandler(), m));
         }
 
         private static async void Time<TMessage>(string testCase, int numOfCalls, Func<TMessage, Task> dispatch) where TMessage : new()

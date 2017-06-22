@@ -36,16 +36,26 @@ namespace Routemeister.Routers
 
             if (!_middlewares.Any())
                 foreach (var action in route.Actions)
-                    await action.Invoke(
-                        _messageHandlerCreator(action.HandlerType, envelope),
-                        envelope.Message).ConfigureAwait(false);
+                {
+                    var handler = _messageHandlerCreator(action.HandlerType, envelope);
+                    var resultingTask = (Task) action.Invoke(handler, envelope.Message);
+
+                    await resultingTask.ConfigureAwait(false);
+                }
             else
                 foreach (var action in route.Actions)
+                {
                     await ProcessAsync(
                         envelope,
-                        async e => await action.Invoke(
-                            _messageHandlerCreator(action.HandlerType, envelope),
-                            envelope.Message).ConfigureAwait(false)).ConfigureAwait(false);
+                        async e =>
+                        {
+                            var handler = _messageHandlerCreator(action.HandlerType, envelope);
+                            var resultingTask = (Task) action.Invoke(handler, envelope.Message);
+
+                            await resultingTask.ConfigureAwait(false);
+                        }
+                    ).ConfigureAwait(false);
+                }
         }
 
         private async Task ProcessAsync(MessageEnvelope envelope, Func<MessageEnvelope, Task> root)

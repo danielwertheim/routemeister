@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace Routemeister
 {
@@ -8,6 +7,6 @@ namespace Routemeister
         Type HandlerType { get; }
         Type MessageType { get; }
 
-        Task Invoke(object handler, object message);
+        object Invoke(object handler, object message);
     }
 }

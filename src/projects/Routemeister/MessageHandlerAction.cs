@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Routemeister
 {
@@ -32,6 +31,6 @@ namespace Routemeister
             Invoker = invoker;
         }
 
-        public Task Invoke(object handler, object message) => Invoker(handler, message);
+        public object Invoke(object handler, object message) => Invoker(handler, message);
     }
 }

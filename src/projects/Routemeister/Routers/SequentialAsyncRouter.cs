@@ -33,7 +33,12 @@ namespace Routemeister.Routers
             try
             {
                 foreach (var action in route.Actions)
-                    await action.Invoke(_messageHandlerCreator(action.HandlerType, envelope), envelope.Message).ConfigureAwait(false);
+                {
+                    var handler = _messageHandlerCreator(action.HandlerType, envelope);
+                    var resultingTask = (Task) action.Invoke(handler, envelope.Message);
+
+                    await resultingTask.ConfigureAwait(false);
+                }
             }
             finally
             {
