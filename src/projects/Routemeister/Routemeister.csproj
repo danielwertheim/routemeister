@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <PackageReleaseNotes>https://github.com/danielwertheim/routemeister/blob/master/ReleaseNotes.md</PackageReleaseNotes>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+    <FileVersion>0.0.0.0</FileVersion>
+    <PackageProjectUrl>https://github.com/danielwertheim/routemeister</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/danielwertheim/routemeister</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <Copyright>Daniel Wertheim</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/danielwertheim/routemeister/master/LICENSE.txt</PackageLicenseUrl>
+    <Authors>danielwertheim</Authors>
+    <Company>danielwertheim</Company>
+    <Version>0.0.0</Version>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Description>Used for in-process async message routing and dispatching. Provides construct for scanning assemblies finding types implementing a message handler marker interface of choice and builds routes from them that later can be used with custom or shipped in-process routers and dispatchers supporting: Send, Publish, Request.</Description>
+    <PackageTags>route routes router dispatcher messaging commands events in-process</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+    <DocumentationFile>bin\Release\netstandard1.4\Routemeister.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
