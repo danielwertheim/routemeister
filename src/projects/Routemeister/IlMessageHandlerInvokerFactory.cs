@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
@@ -7,20 +8,22 @@ namespace Routemeister
 {
     internal static class IlMessageHandlerInvokerFactory
     {
+        private static readonly Type TaskType = typeof(Task);
+        private static readonly Type GenericTaskType = typeof(Task<>);
+        private static readonly Type VoidType = typeof(void);
+
         internal static MessageHandlerInvoker GetMethodInvoker(MethodInfo methodInfo)
         {
-            if (methodInfo.ReturnType.Name == "Task" || methodInfo.ReturnType.Name.StartsWith("Task`"))
-            {
-                return GetAsyncMethodInvoker(methodInfo);
-            }
-            else if (methodInfo.ReturnType.Name == "Void")
-            {
+            if (methodInfo.ReturnType == VoidType)
                 return GetVoidMethodInvoker(methodInfo);
-            }
-            else
-            {
-                return GetObjectMethodInvoker(methodInfo);
-            }
+
+            if (methodInfo.ReturnType == TaskType)
+                return GetAsyncMethodInvoker(methodInfo);
+
+            if (methodInfo.ReturnType.GetTypeInfo().IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == GenericTaskType)
+                return GetAsyncMethodInvoker(methodInfo);
+
+            return GetObjectMethodInvoker(methodInfo);
         }
 
         private static MessageHandlerInvoker GetAsyncMethodInvoker(MethodInfo methodInfo)
