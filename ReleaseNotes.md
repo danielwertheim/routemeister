@@ -1,5 +1,8 @@
 # Release notes
 
+## v2.1.0 - 2017-06-26
+- **[New]:** `SyncDispatcher` allowing non async `Send`, `Publish` and `Request`.
+
 ## v2.0.0 - 2017-06-22
 - **[New]:** Targets .NET Standard 1.4 instead of .NET 4.5
 - **[New]:** Added concept of dispatchers with first implementation being `AsyncDispatcher`, which supports: `SendAsync`, `PublishAsync` and `RequestAsync`.
