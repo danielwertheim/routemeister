@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Routemeister.Dispatchers
 {
-    public class SyncDispatcher
+    public class SyncDispatcher : ISyncDispatcher
     {
         private readonly MessageHandlerCreator _messageHandlerCreator;
         private readonly MessageRoutes _messageRoutes;
