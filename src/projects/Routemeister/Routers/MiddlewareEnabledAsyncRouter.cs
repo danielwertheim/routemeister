@@ -38,7 +38,7 @@ namespace Routemeister.Routers
                 foreach (var action in route.Actions)
                 {
                     var handler = _messageHandlerCreator(action.HandlerType, envelope);
-                    var resultingTask = (Task) action.Invoke(handler, envelope.Message);
+                    var resultingTask = (Task)action.Invoke(handler, envelope.Message);
 
                     await resultingTask.ConfigureAwait(false);
                 }
@@ -50,7 +50,7 @@ namespace Routemeister.Routers
                         async e =>
                         {
                             var handler = _messageHandlerCreator(action.HandlerType, envelope);
-                            var resultingTask = (Task) action.Invoke(handler, envelope.Message);
+                            var resultingTask = (Task)action.Invoke(handler, envelope.Message);
 
                             await resultingTask.ConfigureAwait(false);
                         }
