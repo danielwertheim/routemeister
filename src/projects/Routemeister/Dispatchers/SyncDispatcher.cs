@@ -39,6 +39,9 @@ namespace Routemeister.Dispatchers
             try
             {
                 var handler = _messageHandlerCreator(action.HandlerType, envelope);
+                if (handler == null)
+                    throw new InvalidOperationException(
+                        $"Message handler of type {action.HandlerType.FullName} created for message type {action.MessageType.FullName} was null.");
                 action.Invoke(handler, envelope.Message);
             }
             finally
@@ -56,9 +59,19 @@ namespace Routemeister.Dispatchers
 
             try
             {
-                foreach (var action in route.Actions)
+                var routeActions = route.Actions.Select(a => Tuple.Create(a, _messageHandlerCreator(a.HandlerType, envelope))).ToList();
+                foreach (var routeAction in routeActions)
                 {
-                    var handler = _messageHandlerCreator(action.HandlerType, envelope);
+                    var action = routeAction.Item1;
+                    var handler = routeAction.Item2;
+                    if (handler == null)
+                        throw new InvalidOperationException(
+                            $"Message handler of type {action.HandlerType.FullName} created for message type {action.MessageType.FullName} was null.");
+                }
+                foreach (var routeAction in routeActions)
+                {
+                    var action = routeAction.Item1;
+                    var handler = routeAction.Item2;
                     action.Invoke(handler, envelope.Message);
                 }
             }
@@ -87,6 +100,9 @@ namespace Routemeister.Dispatchers
             try
             {
                 var handler = _messageHandlerCreator(action.HandlerType, envelope);
+                if (handler == null)
+                    throw new InvalidOperationException(
+                        $"Message handler of type {action.HandlerType.FullName} created for message type {action.MessageType.FullName} was null.");
                 var result = (TResponse)action.Invoke(handler, envelope.Message);
 
                 return result;

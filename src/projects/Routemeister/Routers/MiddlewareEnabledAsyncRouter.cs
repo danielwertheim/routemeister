@@ -34,28 +34,41 @@ namespace Routemeister.Routers
             var route = _messageRoutes.GetRoute(message.GetType());
             var envelope = new MessageEnvelope(message, route.MessageType);
 
+            var routeActions = route.Actions.Select(a => Tuple.Create(a, _messageHandlerCreator(a.HandlerType, envelope))).ToList();
+            foreach (var routeAction in routeActions)
+            {
+                var action = routeAction.Item1;
+                var handler = routeAction.Item2;
+                if (handler == null)
+                    throw new InvalidOperationException(
+                        $"Message handler of type {action.HandlerType.FullName} created for message type {action.MessageType.FullName} was null.");
+            }
             if (!_middlewares.Any())
-                foreach (var action in route.Actions)
+            {
+                foreach (var routeAction in routeActions)
                 {
-                    var handler = _messageHandlerCreator(action.HandlerType, envelope);
-                    var resultingTask = (Task)action.Invoke(handler, envelope.Message);
-
+                    var action = routeAction.Item1;
+                    var handler = routeAction.Item2;
+                    var resultingTask = (Task) action.Invoke(handler, envelope.Message);
                     await resultingTask.ConfigureAwait(false);
                 }
+            }
             else
-                foreach (var action in route.Actions)
+            {
+                foreach (var routeAction in routeActions)
                 {
+                    var action = routeAction.Item1;
+                    var handler = routeAction.Item2;
                     await ProcessAsync(
                         envelope,
                         async e =>
                         {
-                            var handler = _messageHandlerCreator(action.HandlerType, envelope);
-                            var resultingTask = (Task)action.Invoke(handler, envelope.Message);
-
+                            var resultingTask = (Task) action.Invoke(handler, envelope.Message);
                             await resultingTask.ConfigureAwait(false);
                         }
                     ).ConfigureAwait(false);
                 }
+            }
         }
 
         private async Task ProcessAsync(MessageEnvelope envelope, Func<MessageEnvelope, Task> root)

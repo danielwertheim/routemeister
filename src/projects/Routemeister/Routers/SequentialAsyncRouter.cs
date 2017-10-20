@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Routemeister.Routers
@@ -32,9 +33,19 @@ namespace Routemeister.Routers
 
             try
             {
-                foreach (var action in route.Actions)
+                var routeActions = route.Actions.Select(a => Tuple.Create(a, _messageHandlerCreator(a.HandlerType, envelope))).ToList();
+                foreach (var routeAction in routeActions)
                 {
-                    var handler = _messageHandlerCreator(action.HandlerType, envelope);
+                    var action = routeAction.Item1;
+                    var handler = routeAction.Item2;
+                    if (handler == null)
+                        throw new InvalidOperationException(
+                            $"Message handler of type {action.HandlerType.FullName} created for message type {action.MessageType.FullName} was null.");
+                }
+                foreach (var routeAction in routeActions)
+                {
+                    var action = routeAction.Item1;
+                    var handler = routeAction.Item2;
                     var resultingTask = (Task)action.Invoke(handler, envelope.Message);
 
                     await resultingTask.ConfigureAwait(false);

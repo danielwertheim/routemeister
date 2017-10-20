@@ -164,6 +164,21 @@ namespace Routemeister.UnitTests.Routers
                 "MW2 in MW1 is 'MW2 of ConcreteMessageB'");
         }
 
+        [Fact]
+        public async Task Should_throw_if_created_handler_is_null()
+        {
+            var factory = new MessageRouteFactory();
+            var routes = new MessageRoutes
+            {
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IHandle<>))
+            };
+            UnitUnderTest = new MiddlewareEnabledAsyncRouter((t, e) => null, routes);
+
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => UnitUnderTest.RouteAsync(new ConcreteMessageA()));
+
+            exception.Message.Should().Be($"Message handler of type {typeof(HandlerA).FullName} created for message type {typeof(ConcreteMessageA).FullName} was null.");
+        }
+
         public interface IHandle<in T>
         {
             Task HandleAsync(T message);
