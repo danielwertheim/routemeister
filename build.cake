@@ -44,6 +44,7 @@ Task("Build").Does(() => {
                 .SetVerbosity(Verbosity.Minimal)
                 .WithTarget("Rebuild")
                 .WithProperty("TreatWarningsAsErrors", "true")
+                .WithProperty("NoRestore", "true")
                 .WithProperty("Version", config.SemVer)
                 .WithProperty("AssemblyVersion", config.BuildVersion)
                 .WithProperty("FileVersion", config.BuildVersion));
@@ -61,6 +62,8 @@ Task("UnitTests").Does(() => {
 });
 
 Task("Pack").Does(() => {
+    DeleteFiles(config.SrcDir + "projects/**/*.nupkg");
+
     foreach(var sln in GetFiles(config.SrcDir + "projects/**/*.csproj")) {
         DotNetBuild(sln, settings =>
             settings
@@ -68,6 +71,8 @@ Task("Pack").Does(() => {
                 .SetVerbosity(Verbosity.Minimal)
                 .WithTarget("Pack")
                 .WithProperty("TreatWarningsAsErrors", "true")
+                .WithProperty("NoRestore", "true")
+                .WithProperty("NoBuild", "true")
                 .WithProperty("Version", config.SemVer));
     }
 
