@@ -3,7 +3,7 @@ Routemeister is a small lib built with one single purpose. **Effectively perform
 
 It supports Routers and/or Dispatchers; the difference being the router just routes the message to the endpoint, while the dispatcher supports different messaging strategies like: `Send`, `Publish` and `Request-Response`.
 
-It's built against .NET Standard v1.4
+It's built against .NET Standard v1.3 and 2.0
 
 ## External writings
 - [How to create a simple in memory aggregator using Routemeister](https://danielwertheim.se/how-to-create-a-simple-in-memory-aggregator-using-routemeister/)
