@@ -1,5 +1,8 @@
 # Release notes
 
+## v2.2.0 - 2017-10-21
+- **[New]:** Targets .NET Standard 1.3 and .NET Standard 2.0
+
 ## v2.1.0 - 2017-06-26
 - **[New]:** `SyncDispatcher` allowing non async `Send`, `Publish` and `Request`.
 
