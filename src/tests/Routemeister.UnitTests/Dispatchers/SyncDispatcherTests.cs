@@ -103,6 +103,70 @@ namespace Routemeister.UnitTests.Dispatchers
             interceptedMatchingState.Should().BeTrue();
         }
 
+        [Fact]
+        public void SendAsync_Should_throw_if_created_handler_is_null()
+        {
+            var factory = new MessageRouteFactory();
+            var routes = new MessageRoutes
+            {
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IMessageHandler<>)),
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IRequestHandler<,>))
+            };
+            UnitUnderTest = new SyncDispatcher((t, e) => null, routes);
+
+            var exception = Assert.Throws<InvalidOperationException>(() => UnitUnderTest.Send(new ConcreteMessageA()));
+
+            exception.Message.Should().Be($"Message handler of type {typeof(HandlerA).FullName} created for message type {typeof(ConcreteMessageA).FullName} was null.");
+        }
+
+        [Fact]
+        public void PublishAsync_Should_throw_if_created_handler_is_null()
+        {
+            var factory = new MessageRouteFactory();
+            var routes = new MessageRoutes
+            {
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IMessageHandler<>)),
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IRequestHandler<,>))
+            };
+            UnitUnderTest = new SyncDispatcher((t, e) => t == typeof(HandlerB) ? null : Activator.CreateInstance(t), routes);
+
+            var exception = Assert.Throws<InvalidOperationException>(() => UnitUnderTest.Publish(new ConcreteMessageB()));
+
+            exception.Message.Should().Be($"Message handler of type {typeof(HandlerB).FullName} created for message type {typeof(ConcreteMessageB).FullName} was null.");
+        }
+
+        [Fact]
+        public void PublishAsync_Should_throw_if_other_created_handler_is_null()
+        {
+            var factory = new MessageRouteFactory();
+            var routes = new MessageRoutes
+            {
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IMessageHandler<>)),
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IRequestHandler<,>))
+            };
+            UnitUnderTest = new SyncDispatcher((t, e) => t == typeof(HandlerA) ? null : Activator.CreateInstance(t), routes);
+
+            var exception = Assert.Throws<InvalidOperationException>(() => UnitUnderTest.Publish(new ConcreteMessageA()));
+
+            exception.Message.Should().Be($"Message handler of type {typeof(HandlerA).FullName} created for message type {typeof(ConcreteMessageA).FullName} was null.");
+        }
+
+        [Fact]
+        public void RequestAsync_Should_throw_if_created_handler_is_null()
+        {
+            var factory = new MessageRouteFactory();
+            var routes = new MessageRoutes
+            {
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IMessageHandler<>)),
+                factory.Create(new[] {GetType().GetTypeInfo().Assembly}, typeof (IRequestHandler<,>))
+            };
+            UnitUnderTest = new SyncDispatcher((t, e) => null, routes);
+
+            var exception = Assert.Throws<InvalidOperationException>(() => UnitUnderTest.Request(new RequestMessage()));
+
+            exception.Message.Should().Be($"Message handler of type {typeof(HandlerA).FullName} created for message type {typeof(RequestMessage).FullName} was null.");
+        }
+
         public class ConcreteMessageA
         {
             public ConcurrentBag<string> Data { get; } = new ConcurrentBag<string>();
