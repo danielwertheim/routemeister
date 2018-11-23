@@ -3,6 +3,7 @@ node_modules/
 
 # vs
 .vs/
+.vscode/
 [Aa]pp_[Dd]ata/
 [Bb]in/
 [D]ebug/

@@ -40,7 +40,8 @@ namespace Routemeister
             if (newRoute == null)
                 throw new ArgumentNullException(nameof(newRoute));
 
-            if (_state.TryGetValue(newRoute.MessageType, out MessageRoute existingRoute))
+            MessageRoute existingRoute;
+            if (_state.TryGetValue(newRoute.MessageType, out existingRoute))
             {
                 if (ReferenceEquals(existingRoute, newRoute))
                     return this;
@@ -54,9 +55,14 @@ namespace Routemeister
             throw new Exception($"Could not add new route for message type '{newRoute.MessageType.Name}'. Do not know why.");
         }
 
-        public MessageRoute GetRoute(Type messageType) => _state.TryGetValue(messageType, out MessageRoute route)
-            ? route
-            : MessageRoute.Empty(messageType);
+        public MessageRoute GetRoute(Type messageType)
+        {
+            MessageRoute route;
+
+            return _state.TryGetValue(messageType, out route)
+                ? route
+                : MessageRoute.Empty(messageType);
+        }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
