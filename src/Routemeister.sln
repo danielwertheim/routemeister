@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routemeister", "projects\Routemeister\Routemeister.csproj", "{D22BA0C3-AD45-4D4B-82C0-400FB6F89546}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Routemeister", "projects\Routemeister\Routemeister.csproj", "{D22BA0C3-AD45-4D4B-82C0-400FB6F89546}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routemeister.UnitTests", "tests\Routemeister.UnitTests\Routemeister.UnitTests.csproj", "{1915BE7C-669B-4CC3-9305-ADD28C14E5EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Routemeister.UnitTests", "tests\Routemeister.UnitTests\Routemeister.UnitTests.csproj", "{1915BE7C-669B-4CC3-9305-ADD28C14E5EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CA9EACD9-E9CD-4DC6-999B-22A4D9AB6523}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timings", "samples\Timings\Timings.csproj", "{777E6FC2-0A11-439C-80D1-0E4489A4BAA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timings", "samples\Timings\Timings.csproj", "{777E6FC2-0A11-439C-80D1-0E4489A4BAA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutofacSample", "samples\AutofacSample\AutofacSample.csproj", "{5AE368CF-AC84-433C-BA97-EC1E3162AC9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutofacSample", "samples\AutofacSample\AutofacSample.csproj", "{5AE368CF-AC84-433C-BA97-EC1E3162AC9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{987B15A2-DB33-45E3-8502-6F64045C73CC}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +47,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{777E6FC2-0A11-439C-80D1-0E4489A4BAA5} = {CA9EACD9-E9CD-4DC6-999B-22A4D9AB6523}
 		{5AE368CF-AC84-433C-BA97-EC1E3162AC9A} = {CA9EACD9-E9CD-4DC6-999B-22A4D9AB6523}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {842DDA05-EBD3-492F-AC36-684B162F9B66}
 	EndGlobalSection
 EndGlobal
