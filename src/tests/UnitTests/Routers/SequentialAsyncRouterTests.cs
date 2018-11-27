@@ -3,10 +3,11 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Routemeister;
 using Routemeister.Routers;
 using Xunit;
 
-namespace Routemeister.UnitTests.Routers
+namespace UnitTests.Routers
 {
     public class SequentialAsyncRouterTests : UnitTestsOf<SequentialAsyncRouter>
     {

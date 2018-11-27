@@ -1,9 +1,10 @@
 ﻿using System;
 using FluentAssertions;
 using Moq;
+using Routemeister;
 using Xunit;
 
-namespace Routemeister.UnitTests
+namespace UnitTests
 {
     public class MessageRoutesTests : UnitTestsOf<MessageRoutes>
     {

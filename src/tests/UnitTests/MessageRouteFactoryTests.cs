@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
+using System.Threading.Tasks;
 using FluentAssertions;
+using Routemeister;
 using Xunit;
 
-namespace Routemeister.UnitTests
+namespace UnitTests
 {
     public class MessageRouteFactoryTests : UnitTestsOf<MessageRouteFactory>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Routemeister.UnitTests
+namespace UnitTests
 {
     public abstract class UnitTestsOf<T> : UnitTests
     {
@@ -12,7 +12,7 @@ namespace Routemeister.UnitTests
 
     public abstract class UnitTests : IDisposable
     {
-        public UnitTests()
+        protected UnitTests()
         {
             OnBeforeEachTest();
         }

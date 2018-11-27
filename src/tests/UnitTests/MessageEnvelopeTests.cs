@@ -1,7 +1,8 @@
 using FluentAssertions;
+using Routemeister;
 using Xunit;
 
-namespace Routemeister.UnitTests
+namespace UnitTests
 {
     public class MessageEnvelopeTests : UnitTestsOf<MessageEnvelope>
     {

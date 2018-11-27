@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Routemeister", "projects\Routemeister\Routemeister.csproj", "{D22BA0C3-AD45-4D4B-82C0-400FB6F89546}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Routemeister.UnitTests", "tests\Routemeister.UnitTests\Routemeister.UnitTests.csproj", "{1915BE7C-669B-4CC3-9305-ADD28C14E5EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{1915BE7C-669B-4CC3-9305-ADD28C14E5EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CA9EACD9-E9CD-4DC6-999B-22A4D9AB6523}"
 EndProject
